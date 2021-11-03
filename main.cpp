@@ -6,7 +6,6 @@
 #include "globals.h"
 
 using namespace std;
-using namespace std::string;
 
 int main() {
 	string input;
@@ -17,21 +16,21 @@ int main() {
 		 << "Once all names are entered, type 'start' to begin.\n" 
 		 << "Enter names below:\n";
 		 
-	while 1 {
+	while (1) {
 		while (input != "start") {
 			cin >> input;
-			if (playerCount > 8) cout << "Too many players! Please begin game.\n"
-			else {
+			if (playerCount > 8) cout << "Too many players! Please begin game.\n";
+			else if (input != "start"){
 				playerCount++; 
 				//insert new node into player list
 			}
 		}
 		input.clear();
-		if (playerCount < 2) cout "Too few players! Add more players before starting:\n";
+		if (playerCount < 2) cout << "Too few players! Add more players before starting:\n";
 		else break;
 	}
 	
-	cout << "Enjoy!\n"
+	cout << "Enjoy!\n";
 	//call function to begin game in while-loop.cpp
 		
 	return 0;
