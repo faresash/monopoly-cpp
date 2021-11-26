@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/fares/Documents/GitHub/monopoly-cpp/functions.h
+
+C:/Users/fares/Documents/GitHub/monopoly-cpp/globals.h
+
+C:/Users/fares/Documents/GitHub/monopoly-cpp/macros.h
+
+C:/Users/fares/Documents/GitHub/monopoly-cpp/main.cpp
+iostream
+-
+string
+-
+list
+-
+algorithm
+-
+array
+-
+random
+-
+macros.h
+C:/Users/fares/Documents/GitHub/monopoly-cpp/macros.h
+functions.h
+C:/Users/fares/Documents/GitHub/monopoly-cpp/functions.h
+globals.h
+C:/Users/fares/Documents/GitHub/monopoly-cpp/globals.h
+
