@@ -94,6 +94,7 @@ public:
         cout << position << "\n";
         cout << wallet << "\n";
         cout << debt << "\n";
-        cout << "\n";
+        showlist(ownedProperties);
     }
+
 };
