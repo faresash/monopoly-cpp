@@ -7,6 +7,7 @@
 #include "macros.h"
 #include "functions.h"
 #include "globals.h"
+#include "objects.h"
 
 using namespace std;
 list<string> players_ll; //linked list of player names
@@ -87,7 +88,7 @@ public:
     bool outJailCard; // Whether the player has the "Get out of jail free" card
     bool bankruptcyStatus; // Whether player is bankrupt
 
-    void Check_Status(string Name, int playerNumber, ) {
+    void Check_Status(string Name, int playerNumber) {
 
     }
 };
