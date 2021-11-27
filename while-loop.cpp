@@ -18,6 +18,7 @@ void runGame() {
     Property villa(2, 2, 60000, "Big House");
     play1.addProperty(house);
     play1.addProperty(villa);
+    play1.Check_Status();
 }
 
 

@@ -99,16 +99,24 @@ public:
     bool outJailCard; // Whether the player has the "Get out of jail free" card
     bool bankruptcyStatus; // Whether player is bankrupt
 
-    void Check_Status(string Name, int playerNumber, int position, double wallet, double debt, list<Property> ownedProperties) {
-        cout << Name << "\n";
-        cout << playerNumber << "\n";
-        cout << position << "\n";
-        cout << wallet << "\n";
-        cout << debt << "\n";
+    void Check_Status(void) {
+        cout << "Player Name: " << name << "\n";
+        cout << "Player ID: " << playerNumber << "\n";
+        cout << "Player Position: " << position << "\n";
+        cout << "Wallet Amount: " << wallet << "\n";
+        cout << "Debt Incurred: " << debt << "\n";
+        cout << "Properties Held: ";
         list <Property> :: iterator it;
         for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
-            cout << ', ' << it->getName();
+            cout << '\t' << it->getName();
         cout << '\n';
+    }
+
+    void Is_Bankrupt(void) {
+        if ((wallet <= -1) || (debt > wallet)) {
+            bankruptcyStatus = true;
+        }
+        
     }
 
     void addProperty(Property house) {
