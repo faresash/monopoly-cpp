@@ -80,7 +80,7 @@ void showlist(list <Property> lst)
 {
     list <Property> :: iterator it;
     for(it = lst.begin(); it != lst.end(); ++it)
-        cout << '\t' << *it.;
+        cout << '\t' << *it.getName();
     cout << '\n';
 }
 
