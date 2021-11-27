@@ -75,5 +75,12 @@ int main() {
 }
 
 class player {
-    // Damn
+private:
+    string Name; // Name of player
+    int playerNumber; // Player identification number
+    int position; // Position of player on the board
+    double wallet; // Amount of money player has
+    double debt; // Debt the player has incurred
+    
+
 };
