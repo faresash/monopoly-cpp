@@ -19,29 +19,29 @@ int main() {
 //----------------------------------------Basic Starting Menu---------------------------------------//
 
     //-------------------------------------Player Name Input----------------------------------------//
-	string input;
-	int playerCount = 0;
+    string input;
+    int playerCount = 0;
 
 
-	cout << "                  MONOPOlY\n" << "Enter seed number:\n";
+    cout << "                  MONOPOlY\n" << "Enter seed number:\n";
     cin >> seed;
     cout << "2-8 players\n"
-		 << "Once all names are entered, type 'start' to begin.\n" 
-		 << "Enter names below:\n";
-		 
-	while (1) {
-		while (input != "start") {
-			cin >> input;
-			if (playerCount > 7) cout << "Too many players! Please begin game.\n";
-			else if (input != "start") {
-				playerCount++; 
-				players_ll.push_back(input);
-			}
-		}
-		input.clear();
-		if (playerCount < 2) cout << "Too few players! Add more players before starting:\n";
-		else break;
-	}
+         << "Once all names are entered, type 'start' to begin.\n"
+         << "Enter names below:\n";
+
+    while (1) {
+        while (input != "start") {
+            cin >> input;
+            if (playerCount > 7) cout << "Too many players! Please begin game.\n";
+            else if (input != "start") {
+                playerCount++;
+                players_ll.push_back(input);
+            }
+        }
+        input.clear();
+        if (playerCount < 2) cout << "Too few players! Add more players before starting:\n";
+        else break;
+    }
 
     //----------------------------------Player Order Shuffle---------------------------------------//
     auto it = players_ll.cbegin();
@@ -58,8 +58,8 @@ int main() {
     }
 
     cout << "As you can see, all of you have $1,500. Try not to lose it.\n";
-	
-	cout << "Enjoy!\n";
+
+    cout << "Enjoy!\n";
 //------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------------------------------//
 
@@ -72,42 +72,6 @@ int main() {
 
 //------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------------------------------//
-		
-	return 0;
-<<<<<<< Updated upstream
+
+    return 0;
 }
-=======
-}
-
-void show_list(list <Property> lst)
-{
-    list <Property> :: iterator it;
-    for(it = lst.begin(); it != lst.end(); ++it)
-        cout << ', ' << it->getName();
-    cout << '\n';
-}
-
-class Player {
-private:
-    string Name; // Name of player
-    int playerNumber; // Player identification number
-    int position; // Position of player on the board
-    double wallet; // Amount of money player has
-    double debt; // Debt the player has incurred
-    list<Property> ownedProperties; // List of properties that the player own
-public:
-    bool jailStatus; // Whether player is in jail
-    bool outJailCard; // Whether the player has the "Get out of jail free" card
-    bool bankruptcyStatus; // Whether player is bankrupt
-
-    void Check_Status(string Name, int playerNumber, int position, double wallet, double debt, list<Property> ownedProperties) {
-        cout << Name << "\n";
-        cout << playerNumber << "\n";
-        cout << position << "\n";
-        cout << wallet << "\n";
-        cout << debt << "\n";
-        show_list(ownedProperties);
-    }
-
-};
->>>>>>> Stashed changes
