@@ -3,30 +3,33 @@
 
 class Property {
 private:
-    int id;
-    int color;
-    int value;
-    std::string name;
+    int id; //Unique ID of the property
+    int color; //What color it has
+    int value; //Its value according to the bank
+    std::string name; //Name of the property
 
 public:
-    Property() {
+    Property() { //default constructor
         id = 0;
         color = 0;
         value = 0;
         name = "No name";
     }
-    Property(int ID, int col, int val, std::string nam) {
+    Property(int ID, int col, int val, std::string nam) { //parameterized constructor
         id = ID;
         color = col;
         value = val;
         name = nam;
     }
-    Property operator = (const Property & other) {
+    Property operator = (const Property & other) { //= operator overload
         id = other.id;
         color = other.color;
         value = other.value;
         name = other.name;
         return *this;
+    }
+    std::string getName() {
+        return name;
     }
 };
 
