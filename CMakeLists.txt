@@ -9,6 +9,7 @@ add_executable(monopoly_cpp
         functions.h
         globals.h
         macros.h
+        objects.h
         main.cpp
         objects.cpp
         user-interface.cpp
