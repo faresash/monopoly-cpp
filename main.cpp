@@ -67,7 +67,7 @@ int main() {
 //--------------------------------------Game Function Call----------------------------------------//
 
 
-	                  //call function to begin game in while-loop.cpp
+    runGame();
 
 
 //------------------------------------------------------------------------------------------------//
@@ -75,35 +75,3 @@ int main() {
 		
 	return 0;
 }
-
-void show_list(list <Property> lst)
-{
-    list <Property> :: iterator it;
-    for(it = lst.begin(); it != lst.end(); ++it)
-        cout << '\t' << it->getName();
-    cout << '\n';
-}
-
-class Player {
-private:
-    string Name; // Name of player
-    int playerNumber; // Player identification number
-    int position; // Position of player on the board
-    double wallet; // Amount of money player has
-    double debt; // Debt the player has incurred
-    list<Property> ownedProperties; // List of properties that the player own
-public:
-    bool jailStatus; // Whether player is in jail
-    bool outJailCard; // Whether the player has the "Get out of jail free" card
-    bool bankruptcyStatus; // Whether player is bankrupt
-
-    void Check_Status(string Name, int playerNumber, int position, double wallet, double debt, list<Property> ownedProperties) {
-        cout << Name << "\n";
-        cout << playerNumber << "\n";
-        cout << position << "\n";
-        cout << wallet << "\n";
-        cout << debt << "\n";
-        show_list(ownedProperties);
-    }
-
-};

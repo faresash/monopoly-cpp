@@ -1,6 +1,10 @@
 #ifndef MONOPOLY_CPP_OBJECTS_H
 #define MONOPOLY_CPP_OBJECTS_H
 
+using namespace std;
+
+void runGame();
+
 class Property {
 private:
     int id; //Unique ID of the property
@@ -72,6 +76,49 @@ class freeParkingSquare : public Square {
 };
 
 class taxSquare : public Square {
+
+};
+
+void show_list(list <Property> lst)
+{
+    list <Property> :: iterator it;
+    for(it = lst.begin(); it != lst.end(); ++it)
+        cout << '\t' << it->getName();
+    cout << '\n';
+}
+
+class Player {
+private:
+    string name; // Name of player
+    int playerNumber; // Player identification number
+    int position; // Position of player on the board
+    double wallet; // Amount of money player has
+    double debt; // Debt the player has incurred
+    list<Property> ownedProperties; // List of properties that the player own
+public:
+    Player(string nam, int num, int pos = 0, double money = 1500, double det = 0) {
+        name = nam;
+        playerNumber = num;
+        position = pos;
+        wallet = money;
+        debt = det;
+    }
+    bool jailStatus; // Whether player is in jail
+    bool outJailCard; // Whether the player has the "Get out of jail free" card
+    bool bankruptcyStatus; // Whether player is bankrupt
+
+    void Check_Status(string Name, int playerNumber, int position, double wallet, double debt, list<Property> ownedProperties) {
+        cout << Name << "\n";
+        cout << playerNumber << "\n";
+        cout << position << "\n";
+        cout << wallet << "\n";
+        cout << debt << "\n";
+        show_list(ownedProperties);
+    }
+
+    void addProperty(Property house) {
+        ownedProperties.push_back(house);
+    }
 
 };
 
