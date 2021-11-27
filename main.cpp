@@ -75,5 +75,5 @@ int main() {
 }
 
 class player {
-    
+    // Damn
 };
