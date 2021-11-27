@@ -13,6 +13,7 @@ public:
         id = 0;
         color = 0;
         value = 0;
+        name = "No name";
     }
     Property(int ID, int col, int val, std::string nam) {
         id = ID;
