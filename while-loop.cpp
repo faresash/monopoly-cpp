@@ -9,7 +9,6 @@
 #include "globals.h"
 #include "objects.h"
 #include <iterator>
-<<<<<<< Updated upstream
 
 void runGame() {
     Player play1("fares", 1);
@@ -17,7 +16,7 @@ void runGame() {
     Property villa(2, 2, 60000, "Big House");
     play1.addProperty(house);
     play1.addProperty(villa);
-=======
+
 using namespace std;
 
 // Endgame global variable
@@ -28,5 +27,4 @@ int While_OS() {
 
     }
     return 0;
->>>>>>> Stashed changes
 }
