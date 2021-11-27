@@ -33,6 +33,3 @@ class jailSquare : public Square {
 class goToJailSquare : public Square {
 
 };
-
-
-//hello
