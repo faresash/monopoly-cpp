@@ -8,6 +8,7 @@
 #include "functions.h"
 #include "globals.h"
 #include "objects.h"
+#include <iterator>
 
 using namespace std;
 list<string> players_ll; //linked list of player names
@@ -73,6 +74,14 @@ int main() {
 //------------------------------------------------------------------------------------------------//
 		
 	return 0;
+}
+
+void showlist(list <Property> lst)
+{
+    list <Property> :: iterator it;
+    for(it = lst.begin(); it != lst.end(); ++it)
+        cout << '\t' << *it.;
+    cout << '\n';
 }
 
 class Player {
