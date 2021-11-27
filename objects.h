@@ -34,10 +34,10 @@ protected:
 
 class propertySquare : public Square {
 private:
-    Property * property; //each Property Square contains a pointer to a property
+    Property property; //each Property Square contains a pointer to a property
 public:
     propertySquare(int myIndex, std::string myName, int ID, int col, int val) {
-        Property * newProp = new Property(ID, col, val); //allocating memory for the new property
+        Property newProp(ID, col, val); //allocating memory for the new property
         index = myIndex; //setting square index to argument
         name = myName; //setting square name to argument
         property = newProp; //setting property to newly allocated one
