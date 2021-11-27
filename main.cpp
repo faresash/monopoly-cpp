@@ -81,6 +81,6 @@ private:
     int position; // Position of player on the board
     double wallet; // Amount of money player has
     double debt; // Debt the player has incurred
-    
+
 
 };
