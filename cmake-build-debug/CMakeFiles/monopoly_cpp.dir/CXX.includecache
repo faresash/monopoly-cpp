@@ -38,6 +38,7 @@ iterator
 
 C:/Users/sande/OneDrive/Desktop/monopoly-cpp/objects.h
 
+<<<<<<< Updated upstream
 C:/Users/sande/OneDrive/Desktop/monopoly-cpp/while-loop.cpp
 iostream
 -
@@ -62,3 +63,5 @@ C:/Users/sande/OneDrive/Desktop/monopoly-cpp/objects.h
 iterator
 -
 
+=======
+>>>>>>> Stashed changes

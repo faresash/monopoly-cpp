@@ -15,8 +15,11 @@ CMakeFiles/monopoly_cpp.dir/objects.cpp.obj
 CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj
  C:/Users/sande/OneDrive/Desktop/monopoly-cpp/user-interface.cpp
 CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj
+<<<<<<< Updated upstream
  C:/Users/sande/OneDrive/Desktop/monopoly-cpp/functions.h
  C:/Users/sande/OneDrive/Desktop/monopoly-cpp/globals.h
  C:/Users/sande/OneDrive/Desktop/monopoly-cpp/macros.h
  C:/Users/sande/OneDrive/Desktop/monopoly-cpp/objects.h
+=======
+>>>>>>> Stashed changes
  C:/Users/sande/OneDrive/Desktop/monopoly-cpp/while-loop.cpp
