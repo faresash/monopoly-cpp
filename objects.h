@@ -79,14 +79,6 @@ class taxSquare : public Square {
 
 };
 
-void show_list(list <Property> lst)
-{
-    list <Property> :: iterator it;
-    for(it = lst.begin(); it != lst.end(); ++it)
-        cout << '\t' << it->getName();
-    cout << '\n';
-}
-
 class Player {
 private:
     string name; // Name of player
@@ -113,7 +105,10 @@ public:
         cout << position << "\n";
         cout << wallet << "\n";
         cout << debt << "\n";
-        show_list(ownedProperties);
+        list <Property> :: iterator it;
+        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
+            cout << ', ' << it->getName();
+        cout << '\n';
     }
 
     void addProperty(Property house) {
