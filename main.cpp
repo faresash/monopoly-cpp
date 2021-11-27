@@ -76,11 +76,11 @@ int main() {
 	return 0;
 }
 
-void showlist(list <Property> lst)
+void show_list(list <Property> lst)
 {
     list <Property> :: iterator it;
     for(it = lst.begin(); it != lst.end(); ++it)
-        cout << '\t' << *it.getName();
+        cout << '\t' << it->getName();
     cout << '\n';
 }
 
@@ -103,7 +103,7 @@ public:
         cout << position << "\n";
         cout << wallet << "\n";
         cout << debt << "\n";
-        showlist(ownedProperties);
+        show_list(ownedProperties);
     }
 
 };
