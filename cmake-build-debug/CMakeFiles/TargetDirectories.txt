@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 C:/Users/fares/Documents/GitHub/monopoly-cpp/cmake-build-debug/CMakeFiles/monopoly_cpp.dir
 C:/Users/fares/Documents/GitHub/monopoly-cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
 C:/Users/fares/Documents/GitHub/monopoly-cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+=======
+C:/Users/sande/OneDrive/Desktop/monopoly-cpp/cmake-build-debug/CMakeFiles/monopoly_cpp.dir
+C:/Users/sande/OneDrive/Desktop/monopoly-cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/sande/OneDrive/Desktop/monopoly-cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+>>>>>>> f4655735f222862da43244ef0edbd5c9b4211a44

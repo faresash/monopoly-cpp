@@ -81,6 +81,13 @@ private:
     int position; // Position of player on the board
     double wallet; // Amount of money player has
     double debt; // Debt the player has incurred
+    Property ownedProperties; // Properties that the player own
+public:
+    bool jailStatus; // Whether player is in jail
+    bool outJailCard; // Whether the player has the "Get out of jail free" card
+    bool bankruptcyStatus; // Whether player is bankrupt
 
+    void Check_Status(string Name, int playerNumber, ) {
 
+    }
 };

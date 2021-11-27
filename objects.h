@@ -1,0 +1,14 @@
+#ifndef MONOPOLY_CPP_OBJECTS_H
+#define MONOPOLY_CPP_OBJECTS_H
+
+
+
+
+
+
+
+
+
+
+
+#endif //MONOPOLY_CPP_OBJECTS_H
