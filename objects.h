@@ -339,6 +339,22 @@ public:
     void addProperty(Property house) {
         ownedProperties.push_back(house);
     }
+
+    void chargeMoney(int charge) {
+        wallet -= charge;
+    }
+
+    void addMoney(int add) {
+        wallet += add;
+    }
+
+    void addDebt(int add) {
+        debt += add;
+    }
+
+    void subDebt(int sub) {
+        debt -= sub;
+    }
 };
 
 
