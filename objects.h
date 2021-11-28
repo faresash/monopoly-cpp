@@ -181,9 +181,47 @@ public:
     }
 };
 
-class goToJailSquare : public Square {
+class GoToJail {
+private:
+    int player; // player id to land on spot
+    std::string Name; // Name of chance card
+    int index; // Index of card
+public:
+    GoToJail() {
+        player = 0;
+        Name = "No name";
+        index = 0;
+    }
 
+    GoToJail(int pla, std::string Nam, int ind) { //parameterized constructor
+        player = pla;
+        Name = Nam;
+        index = ind;
+    }
+    GoToJail operator = (const GoToJail & other) { //= operator overload
+        player = other.player;
+        Name = other.Name;
+        index = other.index;
+        return *this;
+    }
+    std::string getName() {
+        return Name;
+    }
 };
+
+class goToJailSquare : public Square {
+private:
+    GoToJail go_to_jail;
+public:
+    goToJailSquare(int player, std::string myName, int myIndex) {
+        GoToJail newGoToJail(player, myName, myIndex);
+        index = myIndex;
+        name = myName;
+        go_to_jail = newGoToJail;
+    }
+};
+
+
 
 class freeParkingSquare : public Square {
 
