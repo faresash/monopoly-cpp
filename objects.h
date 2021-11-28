@@ -221,14 +221,80 @@ public:
     }
 };
 
+class freeParking {
+private:
+    std::string Name; // Name of chance card
+    int index; // Index of card
+public:
+    freeParking() {
+        Name = "No name";
+        index = 0;
+    }
 
+    freeParking(std::string Nam, int ind) { //parameterized constructor
+        Name = Nam;
+        index = ind;
+    }
+    freeParking operator = (const freeParking & other) { //= operator overload
+        Name = other.Name;
+        index = other.index;
+        return *this;
+    }
+    std::string getName() {
+        return Name;
+    }
+};
 
 class freeParkingSquare : public Square {
+private:
+    freeParking free_parking;
+public:
+    freeParkingSquare(std::string myName, int myIndex) {
+        freeParking new_freeParking(myName, myIndex);
+        index = myIndex;
+        name = myName;
+        free_parking = new_freeParking;
+    }
+};
 
+class tax {
+private:
+    int taxRate; // Amount paid for tax
+    std::string Name; // Name of chance card
+    int index; // Index of card
+public:
+    tax() {
+        taxRate = 0;
+        Name = "No name";
+        index = 0;
+    }
+
+    tax(int rate, std::string Nam, int ind) { //parameterized constructor
+        taxRate = rate;
+        Name = Nam;
+        index = ind;
+    }
+    tax operator = (const tax & other) { //= operator overload
+        taxRate = other.taxRate;
+        Name = other.Name;
+        index = other.index;
+        return *this;
+    }
+    std::string getName() {
+        return Name;
+    }
 };
 
 class taxSquare : public Square {
-
+private:
+    tax Tax;
+public:
+    taxSquare(int mytaxRate, std::string myName, int myIndex) {
+        tax new_tax(mytaxRate, myName, myIndex);
+        index = myIndex;
+        name = myName;
+        Tax = new_tax;
+    }
 };
 
 class Player {
@@ -273,15 +339,7 @@ public:
     void addProperty(Property house) {
         ownedProperties.push_back(house);
     }
-
 };
-
-
-
-
-
-
-
 
 
 #endif //MONOPOLY_CPP_OBJECTS_H
