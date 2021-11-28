@@ -37,6 +37,35 @@ public:
     }
 };
 
+class Chance {
+private:
+    int numDeck; // Number within Deck
+    std::string Name; // Name of chance card
+    int index;
+public:
+
+    Chance() {
+        numDeck = 0;
+        Name = "No name";
+        index = 0;
+    }
+
+    Chance(int Num, std::string Nam, int ind) { //parameterized constructor
+        numDeck = Num;
+        Name = Nam;
+        index = ind;
+    }
+    Chance operator = (const Chance & other) { //= operator overload
+        numDeck = other.numDeck;
+        Name = other.Name;
+        index = other.index;
+        return *this;
+    }
+    std::string getName() {
+        return Name;
+    }
+};
+
 class Square {
 protected:
     int index;
@@ -56,15 +85,100 @@ public:
 };
 
 class chanceSquare : public Square {
+private:
+    Chance chance;
+public:
+    chanceSquare(int myNumDeck, std::string myName, int myIndex) {
+        Chance newChance(myNumDeck, myName, myIndex);
+        index = myIndex;
+        name = myName;
+        chance = newChance;
+    }
+};
 
+class Go {
+private:
+    int money; // Cash from Go
+    std::string Name; // Name of chance card
+    int index;
+public:
+
+    Go() {
+        money = 0;
+        Name = "No name";
+        index = 0;
+    }
+
+    Go(int Money, std::string Nam, int ind) { //parameterized constructor
+        Money = money;
+        Name = Nam;
+        index = ind;
+    }
+    Go operator = (const Go & other) { //= operator overload
+        money = other.money;
+        Name = other.Name;
+        index = other.index;
+        return *this;
+    }
+    std::string getName() {
+        return Name;
+    }
 };
 
 class goSquare : public Square {
+private:
+    Go go;
+public:
+    goSquare(int myMoney, std::string myName, int myIndex) {
+        Go newGo(myMoney, myName, myIndex);
+        index = myIndex;
+        name = myName;
+        go = newGo;
+    }
+};
 
+class Jail {
+private:
+    int diceRoll; // last recorded dice roll from jail
+    int turns; // turns in jail
+    std::string Name; // Name of chance card
+    int index; // Index of card
+public:
+    Jail() {
+        diceRoll = 0;
+        turns = 0;
+        Name = "No name";
+        index = 0;
+    }
+
+    Jail(int Tur, int Rol, std::string Nam, int ind) { //parameterized constructor
+        diceRoll = Rol;
+        turns = Tur;
+        Name = Nam;
+        index = ind;
+    }
+    Jail operator = (const Jail & other) { //= operator overload
+        diceRoll = other.diceRoll;
+        turns = other.turns;
+        Name = other.Name;
+        index = other.index;
+        return *this;
+    }
+    std::string getName() {
+        return Name;
+    }
 };
 
 class jailSquare : public Square {
-
+private:
+    Jail jail;
+public:
+    jailSquare(int mydiceRoll, int myturns, std::string myName, int myIndex) {
+        Jail newJail(mydiceRoll, myturns, myName, myIndex);
+        index = myIndex;
+        name = myName;
+        jail = newJail;
+    }
 };
 
 class goToJailSquare : public Square {
@@ -116,7 +230,6 @@ public:
         if ((wallet <= -1) || (debt > wallet)) {
             bankruptcyStatus = true;
         }
-        
     }
 
     void addProperty(Property house) {
