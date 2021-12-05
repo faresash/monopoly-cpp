@@ -334,6 +334,7 @@ public:
         if ((wallet <= -1) || (debt > wallet)) {
             bankruptcyStatus = true;
         }
+        cout << "Bankrupt: " << bankruptcyStatus << "\n";
     }
 
     void addProperty(Property house) {
