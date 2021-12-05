@@ -19,9 +19,10 @@ void runGame() {
     play1.addProperty(house);
     play1.addProperty(villa);
     play1.Check_Status();
+    play1.chargeMoney(3000);
     cout << play1.bankruptcyStatus;
     cout << "\n";
-    play1.chargeMoney(3000);
+
 }
 
 

@@ -348,14 +348,6 @@ public:
     void addMoney(int add) {
         wallet += add;
     }
-
-    void addDebt(int add) {
-        debt += add;
-    }
-
-    void subDebt(int sub) {
-        debt -= sub;
-    }
 };
 
 
