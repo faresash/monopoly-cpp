@@ -389,15 +389,16 @@ public:
 
 
     void Is_Bankrupt(void) {
-        cout << "Player Name: " << name << "\n";
-        cout << "Player ID: " << playerNumber << "\n";
-        cout << "Player Position: " << position << "\n";
-        cout << "Wallet Amount: " << wallet << "\n";
-        cout << "Debt Incurred: " << debt << "\n";
-        cout << "Properties Held: ";
+        int totalVal = 0;
         list <Property> :: iterator it;
-        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
-            cout << '\t' << it->getName();
+        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it) {
+            it->getValue();
+            totalVal += it;
+        }
+        totalVal += wallet;
+        if (totalVal < 0) {
+            bankruptcyStatus = 1;
+        }
     }
 
 
