@@ -1,6 +1,18 @@
 #ifndef MONOPOLY_CPP_OBJECTS_H
 #define MONOPOLY_CPP_OBJECTS_H
 
+#include <iostream>
+#include <string>
+#include <list>
+#include <algorithm>
+#include <array>
+#include <random>
+#include "macros.h"
+#include "functions.h"
+#include "globals.h"
+#include "objects.h"
+#include <iterator>
+
 using namespace std;
 
 void runGame();
@@ -35,34 +47,79 @@ public:
     std::string getName() {
         return name;
     }
+
+    int getValue() {
+        return value;
+    }
 };
 
 class Chance {
 private:
-    int numDeck; // Number within Deck
     std::string Name; // Name of chance card
     int index;
 public:
-
     Chance() {
-        numDeck = 0;
         Name = "No name";
         index = 0;
     }
 
-    Chance(int Num, std::string Nam, int ind) { //parameterized constructor
-        numDeck = Num;
-        Name = Nam;
-        index = ind;
+    Chance(int Num) { //parameterized constructor
+        switch (Num)
+            index = Num;
     }
     Chance operator = (const Chance & other) { //= operator overload
-        numDeck = other.numDeck;
         Name = other.Name;
         index = other.index;
         return *this;
     }
     std::string getName() {
         return Name;
+    }
+
+    int getIndex() {
+        return index;
+    }
+};
+
+class chanceDeck {
+private:
+    list <Chance> deck;
+public:
+    chanceDeck() {
+        int indexArr[10] = {0,1,2,3,4,5,6,7,8,9};
+        shuffle(indexArr, indexArr + 10, default_random_engine(seed));
+
+        for (int i = 0; i < 10; i++) {
+            Chance card (indexArr[i]);
+            deck.push_back(card);
+        }
+    }
+    void executeChance (Player play) {
+        auto it = deck.begin();
+        switch (it->getIndex()) {
+            case 0: { //Get out of jail free
+                play.jailStatus = true;
+                break;
+            }
+            case 1: { //Go back 3 spaces
+                play.move_back(3);
+                break;
+            }
+            case 2: { //Go to jail, no $200
+                play.goToJail();
+                break;
+            }
+            case 3: { //Pay each player $50
+                auto it = playerList.begin();
+                break;
+            }
+            case 4: break;
+            case 5: break;
+            case 6: break;
+            case 7: break;
+            case 8: break;
+            case 9: break;
+        }
     }
 };
 
@@ -330,11 +387,28 @@ public:
         cout << '\n';
     }
 
+
     void Is_Bankrupt(void) {
-        if ((wallet <= -1) || (debt > wallet)) {
-            bankruptcyStatus = true;
-        }
-        cout << "Bankrupt: " << bankruptcyStatus << "\n";
+        cout << "Player Name: " << name << "\n";
+        cout << "Player ID: " << playerNumber << "\n";
+        cout << "Player Position: " << position << "\n";
+        cout << "Wallet Amount: " << wallet << "\n";
+        cout << "Debt Incurred: " << debt << "\n";
+        cout << "Properties Held: ";
+        list <Property> :: iterator it;
+        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
+            cout << '\t' << it->getName();
+    }
+
+
+    void move_back(int n) { //this function will move a player back with loopback
+        if (pos - n >= 0) pos -= n;
+        else pos = (pos - n) % 40;
+    }
+
+    void move_forward(int n) { //this function will move a player forward with loopback
+        if (pos + n < 40) pos += n;
+        else pos = (pos + n) % 40;
     }
 
     void addProperty(Property house) {
@@ -347,6 +421,11 @@ public:
 
     void addMoney(int add) {
         wallet += add;
+    }
+
+    void goToJail(void) {
+        jailStatus = true;
+        //position = the index of jail;
     }
 };
 

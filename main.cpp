@@ -12,7 +12,6 @@
 
 using namespace std;
 list<string> players_ll; //linked list of player names
-int seed;
 
 int main() {
 //--------------------------------------------------------------------------------------------------//
@@ -20,7 +19,7 @@ int main() {
 
     //-------------------------------------Player Name Input----------------------------------------//
     string input;
-    int playerCount = 0;
+    playerCount = 0;
 
 
     cout << "                  MONOPOlY\n" << "Enter seed number:\n";
@@ -60,6 +59,10 @@ int main() {
     cout << "As you can see, all of you have $1,500. Try not to lose it.\n";
 
     cout << "Enjoy!\n";
+    for (int i = 0; i < playerCount; i++) {
+        Player play1(players_arr[i], i);
+        playerList.push_back(play1);
+    }
 //------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------------------------------//
 
