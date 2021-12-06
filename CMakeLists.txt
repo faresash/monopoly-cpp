@@ -11,6 +11,5 @@ add_executable(monopoly_cpp
         macros.h
         objects.h
         main.cpp
-        objects.cpp
         user-interface.cpp
         while-loop.cpp)

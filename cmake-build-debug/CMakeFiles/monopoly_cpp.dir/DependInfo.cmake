@@ -5,7 +5,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "C:/Users/sande/OneDrive/Desktop/monopoly-cpp/main.cpp" "C:/Users/sande/OneDrive/Desktop/monopoly-cpp/cmake-build-debug/CMakeFiles/monopoly_cpp.dir/main.cpp.obj"
-  "C:/Users/sande/OneDrive/Desktop/monopoly-cpp/objects.cpp" "C:/Users/sande/OneDrive/Desktop/monopoly-cpp/cmake-build-debug/CMakeFiles/monopoly_cpp.dir/objects.cpp.obj"
   "C:/Users/sande/OneDrive/Desktop/monopoly-cpp/user-interface.cpp" "C:/Users/sande/OneDrive/Desktop/monopoly-cpp/cmake-build-debug/CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj"
   "C:/Users/sande/OneDrive/Desktop/monopoly-cpp/while-loop.cpp" "C:/Users/sande/OneDrive/Desktop/monopoly-cpp/cmake-build-debug/CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj"
   )

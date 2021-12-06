@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/monopoly_cpp.dir/main.cpp.obj"
-  "CMakeFiles/monopoly_cpp.dir/objects.cpp.obj"
   "CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj"
   "CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj"
   "libmonopoly_cpp.dll.a"

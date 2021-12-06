@@ -7,12 +7,6 @@ CMakeFiles/monopoly_cpp.dir/main.cpp.obj: ../macros.h
 CMakeFiles/monopoly_cpp.dir/main.cpp.obj: ../main.cpp
 CMakeFiles/monopoly_cpp.dir/main.cpp.obj: ../objects.h
 
-CMakeFiles/monopoly_cpp.dir/objects.cpp.obj: ../functions.h
-CMakeFiles/monopoly_cpp.dir/objects.cpp.obj: ../globals.h
-CMakeFiles/monopoly_cpp.dir/objects.cpp.obj: ../macros.h
-CMakeFiles/monopoly_cpp.dir/objects.cpp.obj: ../objects.cpp
-CMakeFiles/monopoly_cpp.dir/objects.cpp.obj: ../objects.h
-
 CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj: ../user-interface.cpp
 
 CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj: ../functions.h

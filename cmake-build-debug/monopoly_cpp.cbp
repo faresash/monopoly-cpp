@@ -94,9 +94,6 @@
 		<Unit filename="C:/Users/sande/OneDrive/Desktop/monopoly-cpp/main.cpp">
 			<Option target="monopoly_cpp"/>
 		</Unit>
-		<Unit filename="C:/Users/sande/OneDrive/Desktop/monopoly-cpp/objects.cpp">
-			<Option target="monopoly_cpp"/>
-		</Unit>
 		<Unit filename="C:/Users/sande/OneDrive/Desktop/monopoly-cpp/objects.h">
 			<Option target="monopoly_cpp"/>
 		</Unit>

@@ -14,7 +14,7 @@
 #include <iterator>
 
 using namespace std;
-
+class Player;
 void runGame();
 
 class Property {
@@ -87,13 +87,14 @@ private:
 public:
     chanceDeck() {
         int indexArr[10] = {0,1,2,3,4,5,6,7,8,9};
-        shuffle(indexArr, indexArr + 10, default_random_engine(seed));
+        shuffle(indexArr, indexArr + 10, default_random_engine(3));
 
         for (int i = 0; i < 10; i++) {
             Chance card (indexArr[i]);
             deck.push_back(card);
         }
     }
+    /*
     void executeChance (Player play) {
         auto it = deck.begin();
         switch (it->getIndex()) {
@@ -120,7 +121,7 @@ public:
             case 8: break;
             case 9: break;
         }
-    }
+    }*/
 };
 
 class Square {
@@ -141,6 +142,7 @@ public:
     }
 };
 
+/*
 class chanceSquare : public Square {
 private:
     Chance chance;
@@ -152,7 +154,7 @@ public:
         chance = newChance;
     }
 };
-
+*/
 class Go {
 private:
     int money; // Cash from Go
@@ -355,31 +357,28 @@ public:
 };
 
 class Player {
-private:
+public:
     string name; // Name of player
     int playerNumber; // Player identification number
     int position; // Position of player on the board
     double wallet; // Amount of money player has
-    double debt; // Debt the player has incurred
     list<Property> ownedProperties; // List of properties that the player own
 public:
-    Player(string nam, int num, int pos = 0, double money = 1500, double det = 0) {
+    Player(string nam, int num, int pos = 0, double money = 1500) {
         name = nam;
         playerNumber = num;
         position = pos;
         wallet = money;
-        debt = det;
     }
     bool jailStatus; // Whether player is in jail
     bool outJailCard; // Whether the player has the "Get out of jail free" card
-    bool bankruptcyStatus; // Whether player is bankrupt
+    bool bankruptcyStatus = false; // Whether player is bankrupt
 
     void Check_Status(void) {
         cout << "Player Name: " << name << "\n";
         cout << "Player ID: " << playerNumber << "\n";
         cout << "Player Position: " << position << "\n";
         cout << "Wallet Amount: " << wallet << "\n";
-        cout << "Debt Incurred: " << debt << "\n";
         cout << "Properties Held: ";
         list <Property> :: iterator it;
         for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
@@ -389,19 +388,18 @@ public:
 
 
     void Is_Bankrupt(void) {
-        int totalVal = 0;
+        double totalVal = 0;
         list <Property> :: iterator it;
         for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it) {
-            it->getValue();
-            totalVal += it;
+            totalVal = totalVal + (double)it->getValue();
         }
-        totalVal += wallet;
+        totalVal = totalVal + wallet;
         if (totalVal < 0) {
-            bankruptcyStatus = 1;
+            bankruptcyStatus = true;
         }
     }
 
-
+    /*
     void move_back(int n) { //this function will move a player back with loopback
         if (pos - n >= 0) pos -= n;
         else pos = (pos - n) % 40;
@@ -411,7 +409,7 @@ public:
         if (pos + n < 40) pos += n;
         else pos = (pos + n) % 40;
     }
-
+    */
     void addProperty(Property house) {
         ownedProperties.push_back(house);
     }

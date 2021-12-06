@@ -168,33 +168,6 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\monopoly_cpp.dir\build.make CMakeFiles/monopoly_cpp.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-objects.obj: objects.cpp.obj
-
-.PHONY : objects.obj
-
-# target to build an object file
-objects.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\monopoly_cpp.dir\build.make CMakeFiles/monopoly_cpp.dir/objects.cpp.obj
-.PHONY : objects.cpp.obj
-
-objects.i: objects.cpp.i
-
-.PHONY : objects.i
-
-# target to preprocess a source file
-objects.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\monopoly_cpp.dir\build.make CMakeFiles/monopoly_cpp.dir/objects.cpp.i
-.PHONY : objects.cpp.i
-
-objects.s: objects.cpp.s
-
-.PHONY : objects.s
-
-# target to generate assembly for a file
-objects.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\monopoly_cpp.dir\build.make CMakeFiles/monopoly_cpp.dir/objects.cpp.s
-.PHONY : objects.cpp.s
-
 user-interface.obj: user-interface.cpp.obj
 
 .PHONY : user-interface.obj
@@ -261,9 +234,6 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
-	@echo ... objects.obj
-	@echo ... objects.i
-	@echo ... objects.s
 	@echo ... user-interface.obj
 	@echo ... user-interface.i
 	@echo ... user-interface.s

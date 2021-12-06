@@ -89,24 +89,10 @@ CMakeFiles/monopoly_cpp.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/monopoly_cpp.dir/main.cpp.s"
 	C:\Users\sande\mingw32\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\sande\OneDrive\Desktop\monopoly-cpp\main.cpp -o CMakeFiles\monopoly_cpp.dir\main.cpp.s
 
-CMakeFiles/monopoly_cpp.dir/objects.cpp.obj: CMakeFiles/monopoly_cpp.dir/flags.make
-CMakeFiles/monopoly_cpp.dir/objects.cpp.obj: CMakeFiles/monopoly_cpp.dir/includes_CXX.rsp
-CMakeFiles/monopoly_cpp.dir/objects.cpp.obj: ../objects.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\sande\OneDrive\Desktop\monopoly-cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/monopoly_cpp.dir/objects.cpp.obj"
-	C:\Users\sande\mingw32\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\monopoly_cpp.dir\objects.cpp.obj -c C:\Users\sande\OneDrive\Desktop\monopoly-cpp\objects.cpp
-
-CMakeFiles/monopoly_cpp.dir/objects.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/monopoly_cpp.dir/objects.cpp.i"
-	C:\Users\sande\mingw32\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\sande\OneDrive\Desktop\monopoly-cpp\objects.cpp > CMakeFiles\monopoly_cpp.dir\objects.cpp.i
-
-CMakeFiles/monopoly_cpp.dir/objects.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/monopoly_cpp.dir/objects.cpp.s"
-	C:\Users\sande\mingw32\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\sande\OneDrive\Desktop\monopoly-cpp\objects.cpp -o CMakeFiles\monopoly_cpp.dir\objects.cpp.s
-
 CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj: CMakeFiles/monopoly_cpp.dir/flags.make
 CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj: CMakeFiles/monopoly_cpp.dir/includes_CXX.rsp
 CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj: ../user-interface.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\sande\OneDrive\Desktop\monopoly-cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\sande\OneDrive\Desktop\monopoly-cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj"
 	C:\Users\sande\mingw32\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\monopoly_cpp.dir\user-interface.cpp.obj -c C:\Users\sande\OneDrive\Desktop\monopoly-cpp\user-interface.cpp
 
 CMakeFiles/monopoly_cpp.dir/user-interface.cpp.i: cmake_force
@@ -120,7 +106,7 @@ CMakeFiles/monopoly_cpp.dir/user-interface.cpp.s: cmake_force
 CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj: CMakeFiles/monopoly_cpp.dir/flags.make
 CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj: CMakeFiles/monopoly_cpp.dir/includes_CXX.rsp
 CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj: ../while-loop.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\sande\OneDrive\Desktop\monopoly-cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\sande\OneDrive\Desktop\monopoly-cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj"
 	C:\Users\sande\mingw32\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\monopoly_cpp.dir\while-loop.cpp.obj -c C:\Users\sande\OneDrive\Desktop\monopoly-cpp\while-loop.cpp
 
 CMakeFiles/monopoly_cpp.dir/while-loop.cpp.i: cmake_force
@@ -134,7 +120,6 @@ CMakeFiles/monopoly_cpp.dir/while-loop.cpp.s: cmake_force
 # Object files for target monopoly_cpp
 monopoly_cpp_OBJECTS = \
 "CMakeFiles/monopoly_cpp.dir/main.cpp.obj" \
-"CMakeFiles/monopoly_cpp.dir/objects.cpp.obj" \
 "CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj" \
 "CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj"
 
@@ -142,14 +127,13 @@ monopoly_cpp_OBJECTS = \
 monopoly_cpp_EXTERNAL_OBJECTS =
 
 monopoly_cpp.exe: CMakeFiles/monopoly_cpp.dir/main.cpp.obj
-monopoly_cpp.exe: CMakeFiles/monopoly_cpp.dir/objects.cpp.obj
 monopoly_cpp.exe: CMakeFiles/monopoly_cpp.dir/user-interface.cpp.obj
 monopoly_cpp.exe: CMakeFiles/monopoly_cpp.dir/while-loop.cpp.obj
 monopoly_cpp.exe: CMakeFiles/monopoly_cpp.dir/build.make
 monopoly_cpp.exe: CMakeFiles/monopoly_cpp.dir/linklibs.rsp
 monopoly_cpp.exe: CMakeFiles/monopoly_cpp.dir/objects1.rsp
 monopoly_cpp.exe: CMakeFiles/monopoly_cpp.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\sande\OneDrive\Desktop\monopoly-cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable monopoly_cpp.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\sande\OneDrive\Desktop\monopoly-cpp\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable monopoly_cpp.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\monopoly_cpp.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

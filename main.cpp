@@ -12,6 +12,17 @@
 
 using namespace std;
 list<string> players_ll; //linked list of player names
+int endgame = 0;
+int seed;
+char move;
+int runstate;
+int playerCount;
+list<Player> playerList;
+int state = 0;
+bool turnFlg = 0;
+int dice[2] = {0, 0};
+string decision;
+string exit_decision;
 
 int main() {
 //--------------------------------------------------------------------------------------------------//
@@ -19,7 +30,7 @@ int main() {
 
     //-------------------------------------Player Name Input----------------------------------------//
     string input;
-    playerCount = 0;
+    // playerCount = 0;
 
 
     cout << "                  MONOPOlY\n" << "Enter seed number:\n";
@@ -67,14 +78,92 @@ int main() {
 //------------------------------------------------------------------------------------------------//
 
 //------------------------------------------------------------------------------------------------//
-//--------------------------------------Game Function Call----------------------------------------//
+//--------------------------------------Game Operating System-------------------------------------//
+
+    cout << "STARTED GAME \n";
+    while (1) {
+        cout << "\n";
+        string command;
+        cin >> command;
+        if (command == "show") {
+            list<Player>::iterator iter;
+            for (iter = playerList.begin(); iter != playerList.end(); ++iter) {
+                iter->Check_Status();
+                cout << "\n";
+            }
+        }
+
+        if ((command == "quit") || (command == "q")) {
+            cout << "Thanks for playing!";
+            break;
+        }
+
+        // Check for Bankruptcy and End Game
+        list<Player>::iterator iter_endgame;
+        for (iter_endgame = playerList.begin(); iter_endgame != playerList.end(); ++iter_endgame) {
+            iter_endgame->Is_Bankrupt();
+            if (iter_endgame->bankruptcyStatus) {
+                endgame = 1;
+            }
+        }
+
+        if (endgame == 1) {
+            cout << "END GAME";
+            break;
+        }
 
 
-    runGame();
+        if (command == "next") {
+            state += 1;
+            cout << "\nTURN " << state << "\n";
 
+            list<Player>::iterator iter;
+            for (iter = playerList.begin(); iter != playerList.end(); ++iter) {
+                while(exit_decision != "no") {
+                    cout << iter->name << " ,what action would you like to take?\n";
+                    cin >> decision;
+                    if (decision == "roll") {
+                        dice[0] = 1 + (rand() % 6);
+                        dice[1] = 1 + (rand() % 6);
+                        iter->position += dice[0] + dice[1];
+                        cout << "You are at position index " << iter->position << "\n";
+                        cout << "Want to take another action?\n";
+                        cin >> exit_decision;
+                    }
+                    if (decision == "sell") {
+                        /*
+                         1. Your options to sell are: [DISPLAY OWNED PROPERTIES]
+                         2. Pick property to sell:
+                         3. IMPLEMENT SELLING PICKED PROPERTY
+                         */
+                        cout << "Want to take another action?\n";
+                        cin >> exit_decision;
+                    }
+                    if (decision == "trade") {
+                        /*
+                         1. What Player to Trade with?
+                         2. Manually add or remove properties/money from both players through commands
+                         */
+                        cout << "Want to take another action?\n";
+                        cin >> exit_decision;
+                    }
+                    if (decision == "pay_jail") {
+                        /*
+                         1. remove $50 from player's account
+                         2. Roll dice for player to get to new index
+                         */
+                        cout << "Want to take another action?\n";
+                        cin >> exit_decision;
+                    }
+                }
+                exit_decision = "yes";
+            }
+        }
+
+    }
 
 //------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------------------------------//
 
-    return 0;
+        return 0;
 }
