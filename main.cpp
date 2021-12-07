@@ -22,6 +22,8 @@ bool turnFlg = 0;
 int dice[2] = {0, 0};
 string decision;
 string exit_decision;
+void* Board[40];
+
 
 int main() {
 //--------------------------------------------------------------------------------------------------//
@@ -29,6 +31,7 @@ int main() {
 
     //-------------------------------------Player Name Input----------------------------------------//
     string input;
+    chanceDeck myDeck;
 
 
     cout << "                  MONOPOlY\n" << "Enter seed number:\n";
@@ -75,7 +78,50 @@ int main() {
 //------------------------------------------------------------------------------------------------//
 //--------------------------------------Initialize Board Squares----------------------------------//
 
+    Board[0] = new goSquare(200, "Go", 0);
+    Board[1] = new propertySquare(1, "MEDITERRANEAN_AVENUE", 0, "brown", 60);
+    Board[2] = new Chance;
+    Board[3] = new propertySquare(3, "BALTIC_AVENUE", 1, "brown", 60);
+    Board[4] = new taxSquare(200, "Tax", 5);
+    Board[5] = new propertySquare(5, "READING_RAILROAD", 0, "black", 200);
+    Board[6] = new propertySquare(6, "ORIENTAL_AVENUE", 0, "light_blue", 100);
+    Board[7] = new Chance;
+    Board[8] = new propertySquare(8, "VERMONT_AVENUE", 1, "light_blue", 100);
+    Board[9] = new propertySquare(9, "CONNECTICUT_AVENUE", 2, "light_blue", 120);
+    //Board[10] = new justVisitingSquare();
+    Board[11] = new propertySquare(11, "ST.CHARLES_PLACE", 0, "pink", 140);
+    Board[12] = new propertySquare(12, "ELECTRIC_COMPANY", 0, "white", 140);
+    Board[13] = new propertySquare(13, "STATES_AVENUE", 1, "pink", 140);
+    Board[14] = new propertySquare(14, "VIRGINIA_AVENUE", 2, "pink", 160);
+    Board[15] = new propertySquare(15, "PENNSYLVANIA_RAILROAD", 1, "black", 200);
+    Board[16] = new propertySquare(16, "ST.JAMES_PLACE", 0, "orange", 180);
+    Board[17] = new Chance;
+    Board[18] = new propertySquare(18, "TENNESSEE_AVENUE", 1, "orange", 180);
+    Board[19] = new propertySquare(18, "NEWYORK_AVENUE", 2, "orange", 200);
+    Board[20] = new freeParking;
+    Board[21] = new propertySquare(20, "KENTUCKY_AVENUE", 0, "red", 220);
+    Board[22] = new Chance;
+    Board[23] = new propertySquare(23, "INDIAN_AVENUE", 1, "red", 220);
+    Board[23] = new propertySquare(24, "ILLINOIS_AVENUE", 2, "red", 240);
+    Board[25] = new propertySquare(25, "B.&O._RAILROAD", 2, "black", 200);
+    Board[26] = new propertySquare(26,"ATLANTIC_AVENUE", 0, "yellow", 260);
+    Board[27] = new propertySquare(27, "VENTNOR_AVENUE", 1, "yellow", 260);
+    Board[28] = new propertySquare(28, "WATER_WORKS", 1, "white", 150);
+    Board[29] = new propertySquare(29, "MARVIN_GARDENS", 2, "yellow", 280);
+    Board[30] = new goToJailSquare(-1, "Got to Jail", 10);
+    Board[31] = new propertySquare(31, "PACIFIC_AVENUE", 0, "green", 300);
+    Board[32] = new propertySquare(32, "NORTH_CAROLINA_AVENUE", 1, "green", 300);
+    Board[33] = new Chance;
+    Board[34] = new propertySquare(34, "PENNSYLVANIA_AVENUE", 2, "green", 300);
+    Board[35] = new propertySquare(35, "SHORT_LINE", 4, "black", 320);
+    Board[36] = new Chance;
+    Board[37] = new propertySquare(37, "PARK_PLACE", 0, "blue", 350);
+    Board[38] = new taxSquare(100, "Luxury Tax", 38);
+    Board[39] = new propertySquare(39, "BOARDWALK", 1, "blue", 400);
 
+    // DECIPHERING BOARD ARRAY EXAMPLE:  cout << (*((goSquare *) Board[0])).money;
+    //cout << (*((goSquare *) Board[0])).money;
+    //cout << (*((propertySquare *) Board[9])).property.getValue();
 
 //------------------------------------------------------------------------------------------------//
 //--------------------------------------Game Operating System-------------------------------------//
@@ -114,7 +160,9 @@ int main() {
         }
 
         if (endgame == 1) {
-            cout << "END GAME";
+            cout << "END GAME\n";
+            cout << "The winner is: \n";
+
             break;
         }
 
@@ -140,11 +188,12 @@ int main() {
                          2. Pick property to sell:
                          3. IMPLEMENT SELLING PICKED PROPERTY
                          */
-                        int propSell;
+                        string propSell;
                         cout << "Your options to sell are: ";
                         iter->Check_Properties();
                         cout << "Which property to sell: ";
                         cin >> propSell;
+
 
                         cout << "\nWant to take another action?\n";
                         cin >> exit_decision;
@@ -154,6 +203,8 @@ int main() {
                          1. What Player to Trade with?
                          2. Manually add or remove properties/money from both players through commands
                          */
+                        myDeck.executeChance(*iter, playerList);
+
                         cout << "Want to take another action?\n";
                         cin >> exit_decision;
                     }

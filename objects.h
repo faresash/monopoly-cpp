@@ -14,24 +14,22 @@
 #include <iterator>
 
 using namespace std;
-class Player;
-void runGame();
 
 class Property {
 private:
     int id; //Unique ID of the property
-    int color; //What color it has
+    std::string color; //What color it has
     int value; //Its value according to the bank
     std::string name; //Name of the property
 
 public:
     Property() { //default constructor
         id = 0;
-        color = 0;
+        color = "none";
         value = 0;
         name = "No name";
     }
-    Property(int ID, int col, int val, std::string nam) { //parameterized constructor
+    Property(int ID, std::string col, int val, std::string nam) { //parameterized constructor
         id = ID;
         color = col;
         value = val;
@@ -53,8 +51,92 @@ public:
     }
 };
 
+class Player {
+public:
+    string name; // Name of player
+    int playerNumber; // Player identification number
+    int position; // Position of player on the board
+    double wallet; // Amount of money player has
+    list<Property> ownedProperties; // List of properties that the player own
+public:
+    Player(string nam, int num, int pos = 0, double money = 1500) {
+        name = nam;
+        playerNumber = num;
+        position = pos;
+        wallet = money;
+    }
+    bool jailStatus; // Whether player is in jail
+    bool outJailCard; // Whether the player has the "Get out of jail free" card
+    bool bankruptcyStatus = false; // Whether player is bankrupt
+
+    void Check_Status(void) {
+        cout << "Player Name: " << name << "\n";
+        cout << "Player ID: " << playerNumber << "\n";
+        cout << "Player Position: " << position << "\n";
+        cout << "Wallet Amount: " << wallet << "\n";
+        cout << "Properties Held: ";
+        list <Property> :: iterator it;
+        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
+            cout << '\t' << it->getName();
+        cout << '\n';
+    }
+
+    void Check_Properties(void) {
+        list <Property> :: iterator it;
+        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
+            cout << '\t' << it->getName();
+        cout << '\n';
+    }
+
+
+    void Is_Bankrupt (void) {
+        double totalVal = 0;
+        list <Property> :: iterator it;
+        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it) {
+            totalVal = totalVal + (double)it->getValue();
+        }
+        totalVal = totalVal + wallet;
+        if (totalVal < 0) {
+            bankruptcyStatus = true;
+        }
+    }
+
+
+    void move_back(int n) { //this function will move a player back with loopback
+        if (position - n >= 0) position -= n;
+        else position = (position - n) % 40;
+    }
+
+    void move_forward(int n) { //this function will move a player forward with loopback
+        if (position + n < 40) position += n;
+        else position = (position + n) % 40;
+    }
+
+    void addProperty(Property house) {
+        ownedProperties.push_back(house);
+    }
+
+    void chargeMoney(int charge) {
+        wallet -= charge;
+    }
+
+    void addMoney(int add) {
+        wallet += add;
+    }
+
+    void goToJail(void) {
+        jailStatus = true;
+        position = 10;
+    }
+
+    void payPlayer (Player other, int sum) {
+        wallet -= sum;
+        other.wallet += sum;
+    }
+};
+
 class Chance {
-private:
+public:
     std::string Name; // Name of chance card
     int index;
 public:
@@ -64,8 +146,7 @@ public:
     }
 
     Chance(int Num) { //parameterized constructor
-        switch (Num)
-            index = Num;
+        index = Num;
     }
     Chance operator = (const Chance & other) { //= operator overload
         Name = other.Name;
@@ -87,16 +168,70 @@ private:
 public:
     chanceDeck() {
         int indexArr[10] = {0,1,2,3,4,5,6,7,8,9};
-        shuffle(indexArr, indexArr + 10, default_random_engine(3));
+        shuffle(indexArr, indexArr + 10, default_random_engine(1 + (rand() % 10)));
 
         for (int i = 0; i < 10; i++) {
             Chance card (indexArr[i]);
             deck.push_back(card);
         }
+        //auto it = deck.begin();
+        list<Chance>::iterator it;
+        for (it = deck.begin(); it != deck.end(); ++it) {
+            switch (it->index) {
+                case 0: {
+                    it->Name = "Get Out of Jail Free Card";
+                    break;
+                }
+                case 1: {
+                    it->Name = "Go Back 3 Spaces";
+                    break;
+                }
+                case 2: {
+                    it->Name = "Go to Jail. Do Not Collect $200";
+                    break;
+                }
+                case 3: {
+                    it->Name = "Pay each player $50";
+                    break;
+                }
+                case 4: {
+                    it->Name = "Advance to GO. Collect $200";
+                    break;
+                }
+                case 5: {
+                    it->Name = "Dividend From Bank! Collect $200";
+                    break;
+                }
+                case 6: {
+                    it->Name = "Move forward 3 spaces";
+                    break;
+                }
+                case 7: {
+                    it->Name = "Collect $200 From Bank!";
+                    break;
+                }
+                case 8: {
+                    it->Name = "Speeding Ticket! Pay $50";
+                    break;
+                }
+                case 9: {
+                    it->Name = "Property Repair! Pay $25 For Each Property Owned.";
+                    break;
+                }
+            }
+        }
+
     }
-    /*
-    void executeChance (Player play) {
+    //This function will take the first chance card and push it to the back, then it will pop it from the front
+    void popChance () {
         auto it = deck.begin();
+        deck.push_back(*it);
+        deck.pop_front();
+    }
+
+    void executeChance (Player play, list<Player> playerList) {
+        auto it = deck.begin();
+        cout << '\n' << it -> Name << '\n';
         switch (it->getIndex()) {
             case 0: { //Get out of jail free
                 play.jailStatus = true;
@@ -111,88 +246,76 @@ public:
                 break;
             }
             case 3: { //Pay each player $50
-                auto it = playerList.begin();
+                list<Player>::iterator it;
+                for (it = playerList.begin(); it != playerList.end(); ++it) {
+                    play.payPlayer(*it, 50);
+                }
                 break;
             }
-            case 4: break;
-            case 5: break;
-            case 6: break;
-            case 7: break;
-            case 8: break;
-            case 9: break;
+            case 4: { //Advance to Go, collect $200
+                play.position = 0;
+                break;
+            }
+
+            case 5: { //Dividend from bank, collect $50
+                play.wallet += 50;
+                break;
+            }
+
+            case 6: { //Move forward three spaces
+                play.move_forward(3);
+                break;
+            }
+            case 7: { //Collect $200 from bank
+                play.wallet += 200;
+                break;
+            }
+
+            case 8: { //Speeding ticket worth $50
+                play.wallet -= 50;
+                break;
+            }
+
+            case 9: { //Make general repairs on all your property. For each house pay $25.
+                list<Property>::iterator it;
+                for (it = play.ownedProperties.begin(); it != play.ownedProperties.end(); ++it) {
+                    play.wallet -= 25;
+                }
+                break;
+            }
         }
-    }*/
+        popChance();
+    }
 };
 
 class Square {
-protected:
+public:
     int index;
     std::string name;
 };
 
 class propertySquare : public Square {
-private:
+public:
     Property property; //each Property Square contains a pointer to a property
 public:
-    propertySquare(int myIndex, std::string myName, int ID, int col, int val, std::string nam) {
-        Property newProp(ID, col, val, nam); //allocating memory for the new property
+    propertySquare(int myIndex, std::string myName, int ID, std::string col, int val) {
+        Property newProp(myIndex, col, val, myName); //allocating memory for the new property
         index = myIndex; //setting square index to argument
         name = myName; //setting square name to argument
         property = newProp; //setting property to newly allocated one
     }
 };
 
-/*
-class chanceSquare : public Square {
-private:
-    Chance chance;
+class goSquare : public Square {
 public:
-    chanceSquare(int myNumDeck, std::string myName, int myIndex) {
-        Chance newChance(myNumDeck, myName, myIndex);
-        index = myIndex;
-        name = myName;
-        chance = newChance;
-    }
-};
-*/
-class Go {
-private:
-    int money; // Cash from Go
-    std::string Name; // Name of chance card
+    int money;
+    std::string Name;
     int index;
 public:
-
-    Go() {
-        money = 0;
-        Name = "No name";
-        index = 0;
-    }
-
-    Go(int Money, std::string Nam, int ind) { //parameterized constructor
-        Money = money;
-        Name = Nam;
-        index = ind;
-    }
-    Go operator = (const Go & other) { //= operator overload
-        money = other.money;
-        Name = other.Name;
-        index = other.index;
-        return *this;
-    }
-    std::string getName() {
-        return Name;
-    }
-};
-
-class goSquare : public Square {
-private:
-    Go go;
-public:
     goSquare(int myMoney, std::string myName, int myIndex) {
-        Go newGo(myMoney, myName, myIndex);
+        money = myMoney;
         index = myIndex;
         name = myName;
-        go = newGo;
     }
 };
 
@@ -243,7 +366,7 @@ public:
 class GoToJail {
 private:
     int player; // player id to land on spot
-    std::string Name; // Name of chance card
+    std::string Name; // Name
     int index; // Index of card
 public:
     GoToJail() {
@@ -356,84 +479,7 @@ public:
     }
 };
 
-class Player {
-public:
-    string name; // Name of player
-    int playerNumber; // Player identification number
-    int position; // Position of player on the board
-    double wallet; // Amount of money player has
-    list<Property> ownedProperties; // List of properties that the player own
-public:
-    Player(string nam, int num, int pos = 0, double money = 1500) {
-        name = nam;
-        playerNumber = num;
-        position = pos;
-        wallet = money;
-    }
-    bool jailStatus; // Whether player is in jail
-    bool outJailCard; // Whether the player has the "Get out of jail free" card
-    bool bankruptcyStatus = false; // Whether player is bankrupt
 
-    void Check_Status(void) {
-        cout << "Player Name: " << name << "\n";
-        cout << "Player ID: " << playerNumber << "\n";
-        cout << "Player Position: " << position << "\n";
-        cout << "Wallet Amount: " << wallet << "\n";
-        cout << "Properties Held: ";
-        list <Property> :: iterator it;
-        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
-            cout << '\t' << it->getName();
-        cout << '\n';
-    }
-
-    void Check_Properties(void) {
-        list <Property> :: iterator it;
-        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
-            cout << '\t' << it->getName();
-        cout << '\n';
-    }
-
-
-    void Is_Bankrupt(void) {
-        double totalVal = 0;
-        list <Property> :: iterator it;
-        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it) {
-            totalVal = totalVal + (double)it->getValue();
-        }
-        totalVal = totalVal + wallet;
-        if (totalVal < 0) {
-            bankruptcyStatus = true;
-        }
-    }
-
-
-    void move_back(int n) { //this function will move a player back with loopback
-        if (position - n >= 0) position -= n;
-        else position = (position - n) % 40;
-    }
-
-    void move_forward(int n) { //this function will move a player forward with loopback
-        if (position + n < 40) position += n;
-        else position = (position + n) % 40;
-    }
-
-    void addProperty(Property house) {
-        ownedProperties.push_back(house);
-    }
-
-    void chargeMoney(int charge) {
-        wallet -= charge;
-    }
-
-    void addMoney(int add) {
-        wallet += add;
-    }
-
-    void goToJail(void) {
-        jailStatus = true;
-        //position = the index of jail;
-    }
-};
 
 
 #endif //MONOPOLY_CPP_OBJECTS_H
