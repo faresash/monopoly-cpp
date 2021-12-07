@@ -15,7 +15,6 @@ list<string> players_ll; //linked list of player names
 int endgame = 0;
 int seed;
 char move;
-int runstate;
 int playerCount;
 list<Player> playerList;
 int state = 0;
@@ -82,9 +81,14 @@ int main() {
 
     cout << "STARTED GAME \n";
     while (1) {
-        cout << "\n";
         string command;
         cin >> command;
+
+        if (command == "next") {
+            state += 1;
+            cout << "\nTURN " << state << "\n";
+        }
+
         if (command == "show") {
             list<Player>::iterator iter;
             for (iter = playerList.begin(); iter != playerList.end(); ++iter) {
@@ -114,8 +118,6 @@ int main() {
 
 
         if (command == "next") {
-            state += 1;
-            cout << "\nTURN " << state << "\n";
 
             list<Player>::iterator iter;
             for (iter = playerList.begin(); iter != playerList.end(); ++iter) {
@@ -158,6 +160,9 @@ int main() {
                 }
                 exit_decision = "yes";
             }
+            cout << "\nEnter \"next\" for next turn.\n";
+            cout << "      \"quit\" to exit the game.\n";
+            cout << "      \"show\" to show players' info.\n";
         }
 
     }
