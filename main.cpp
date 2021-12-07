@@ -166,7 +166,7 @@ int main() {
                         cin >> exit_decision;
                     }
                 }
-                exit_decision = "yes";
+                exit_decision = " ";
             }
             cout << "\nEnter \"next\" for next turn.\n";
             cout << "      \"quit\" to exit the game.\n";
