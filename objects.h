@@ -386,6 +386,13 @@ public:
         cout << '\n';
     }
 
+    void Check_Properties(void) {
+        list <Property> :: iterator it;
+        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
+            cout << '\t' << it->getName();
+        cout << '\n';
+    }
+
 
     void Is_Bankrupt(void) {
         double totalVal = 0;
@@ -399,17 +406,17 @@ public:
         }
     }
 
-    /*
+
     void move_back(int n) { //this function will move a player back with loopback
-        if (pos - n >= 0) pos -= n;
-        else pos = (pos - n) % 40;
+        if (position - n >= 0) position -= n;
+        else position = (position - n) % 40;
     }
 
     void move_forward(int n) { //this function will move a player forward with loopback
-        if (pos + n < 40) pos += n;
-        else pos = (pos + n) % 40;
+        if (position + n < 40) position += n;
+        else position = (position + n) % 40;
     }
-    */
+
     void addProperty(Property house) {
         ownedProperties.push_back(house);
     }

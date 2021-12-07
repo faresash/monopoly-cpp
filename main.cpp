@@ -29,7 +29,6 @@ int main() {
 
     //-------------------------------------Player Name Input----------------------------------------//
     string input;
-    // playerCount = 0;
 
 
     cout << "                  MONOPOlY\n" << "Enter seed number:\n";
@@ -38,7 +37,7 @@ int main() {
          << "Once all names are entered, type 'start' to begin.\n"
          << "Enter names below:\n";
 
-    while (1) {
+    while (true) {
         while (input != "start") {
             cin >> input;
             if (playerCount > 7) cout << "Too many players! Please begin game.\n";
@@ -74,13 +73,16 @@ int main() {
         playerList.push_back(play1);
     }
 //------------------------------------------------------------------------------------------------//
-//------------------------------------------------------------------------------------------------//
+//--------------------------------------Initialize Board Squares----------------------------------//
+
+
 
 //------------------------------------------------------------------------------------------------//
 //--------------------------------------Game Operating System-------------------------------------//
 
-    cout << "STARTED GAME \n";
-    while (1) {
+    cout << "\n\nSTARTED GAME \n";
+    cout << "press \"next\" to start turn.\n";
+    while (true) {
         string command;
         cin >> command;
 
@@ -127,7 +129,7 @@ int main() {
                     if (decision == "roll") {
                         dice[0] = 1 + (rand() % 6);
                         dice[1] = 1 + (rand() % 6);
-                        iter->position += dice[0] + dice[1];
+                        iter->move_forward(dice[0] + dice[1]);
                         cout << "You are at position index " << iter->position << "\n";
                         cout << "Want to take another action?\n";
                         cin >> exit_decision;
@@ -138,7 +140,13 @@ int main() {
                          2. Pick property to sell:
                          3. IMPLEMENT SELLING PICKED PROPERTY
                          */
-                        cout << "Want to take another action?\n";
+                        int propSell;
+                        cout << "Your options to sell are: ";
+                        iter->Check_Properties();
+                        cout << "Which property to sell: ";
+                        cin >> propSell;
+
+                        cout << "\nWant to take another action?\n";
                         cin >> exit_decision;
                     }
                     if (decision == "trade") {
