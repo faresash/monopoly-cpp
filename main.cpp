@@ -73,6 +73,7 @@ int main() {
     cout << "Enjoy!\n";
     for (int i = 0; i < playerCount; i++) {
         Player play1(players_arr[i], i);
+        play1.jailStatus = false;
         playerList.push_back(play1);
     }
 //------------------------------------------------------------------------------------------------//
@@ -174,14 +175,7 @@ int main() {
                 while(exit_decision != "no") {
                     cout << iter->name << " ,what action would you like to take?\n";
                     cin >> decision;
-                    if (decision == "roll") {
-                        dice[0] = 1 + (rand() % 6);
-                        dice[1] = 1 + (rand() % 6);
-                        iter->move_forward(dice[0] + dice[1]);
-                        cout << "You are at position index " << iter->position << "\n";
-                        cout << "Want to take another action?\n";
-                        cin >> exit_decision;
-                    }
+
                     if (decision == "sell") {
                         /*
                          1. Your options to sell are: [DISPLAY OWNED PROPERTIES]
@@ -194,28 +188,76 @@ int main() {
                         cout << "Which property to sell: ";
                         cin >> propSell;
 
+                        iter->sellProperty(propSell);
+                        cout << "\nProperty Sold!\n";
 
                         cout << "\nWant to take another action?\n";
                         cin >> exit_decision;
                     }
                     if (decision == "trade") {
+                        string tradePartner;
+                        double tradeAmount;
+                        string tradeProperty;
+                        string trade;
+                        string agreement;
                         /*
                          1. What Player to Trade with?
                          2. Manually add or remove properties/money from both players through commands
                          */
-                        myDeck.executeChance(*iter, playerList);
+                        cout << "Choose a player to trade with: ";
+                        cin >> tradePartner;
+                        cout << "\nChoose a positive monetary value to offer money and negative to request money: ";
+                        cin >> tradeAmount;
+                        cout << "\nChoose a property to trade: ";
+                        cin >> tradeProperty;
+                        cout << "\nWould you like to buy or sell this property? "; // ONLY OPTIONS SHOULD BE "BUY" OR "SELL"
+                        cin >> trade;
+                        cout << "\nDid the other player agree to your offer? ";
+                        cin >> agreement;
 
+                        if ((agreement == "no") || (agreement == "No")) {
+                            // Do Nothing
+                        }
+                        else {
+                            list<Player>::iterator iterator;
+                            for (iterator = playerList.begin(); iterator != playerList.end(); ++iterator) {
+                                if (iterator->name == tradePartner) {
+                                    iter->payPlayer(*iterator, tradeAmount);
+                                    iter->transferProperty(*iterator, tradeProperty, trade);
+                                    cout << "\nTrade has been completed!\n";
+                                }
+                            }
+                        }
                         cout << "Want to take another action?\n";
                         cin >> exit_decision;
                     }
-                    if (decision == "pay_jail") {
-                        /*
-                         1. remove $50 from player's account
-                         2. Roll dice for player to get to new index
-                         */
-                        cout << "Want to take another action?\n";
-                        cin >> exit_decision;
+                    if (iter->jailStatus) { // If in Jail then...
+                        if (decision == "roll") {
+                            cout << "\nYou cannot roll while in jail, please choose another option.\n";
+                        }
+                        if (decision == "pay_jail") {
+                            /*
+                             1. remove $50 from player's account
+                             2. Roll dice for player to get to new index
+                             */
+                            iter->wallet -= 50;
+                            iter->jailStatus = false;
+
+                            cout << "Want to take another action?\n";
+                            cin >> exit_decision;
+                        }
                     }
+                    else{ // Ensures that player can't roll while in jail
+                        if (decision == "roll") {
+                            dice[0] = 1 + (rand() % 6);
+                            dice[1] = 1 + (rand() % 6);
+                            iter->move_forward(dice[0] + dice[1]);
+                            cout << "You are at position index " << iter->position << "\n";
+                            cout << "Want to take another action?\n";
+                            cin >> exit_decision;
+                        }
+                    }
+
                 }
                 exit_decision = " ";
             }

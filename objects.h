@@ -16,7 +16,7 @@
 using namespace std;
 
 class Property {
-private:
+public:
     int id; //Unique ID of the property
     std::string color; //What color it has
     int value; //Its value according to the bank
@@ -116,11 +116,19 @@ public:
         ownedProperties.push_back(house);
     }
 
-    void chargeMoney(int charge) {
+    void chargeMoney(double charge) {
         wallet -= charge;
     }
 
-    void addMoney(int add) {
+    void sellProperty(string Prop) {
+        for (auto itr = ownedProperties.begin(); itr != ownedProperties.end(); itr++) {
+            if (itr->name == Prop) {
+                ownedProperties.erase(itr);
+                wallet += itr->value;
+            }
+        }
+    }
+    void addMoney(double add) {
         wallet += add;
     }
 
@@ -129,9 +137,28 @@ public:
         position = 10;
     }
 
-    void payPlayer (Player other, int sum) {
+    void payPlayer (Player other, double sum) {
         wallet -= sum;
         other.wallet += sum;
+    }
+
+    void transferProperty(Player other, string prop, string transaction) {
+        if (transaction == "buy") {
+            for (auto itr = other.ownedProperties.begin(); itr != other.ownedProperties.end(); itr++) {
+                if (itr->name == prop) {
+                    ownedProperties.push_back(*itr);
+                    other.ownedProperties.erase(itr);
+                }
+            }
+        }
+        if (transaction == "sell") {
+            for (auto itr = other.ownedProperties.begin(); itr != other.ownedProperties.end(); itr++) {
+                if (itr->name == prop) {
+                    other.ownedProperties.push_back(*itr);
+                    ownedProperties.erase(itr);
+                }
+            }
+        }
     }
 };
 
