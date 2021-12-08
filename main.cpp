@@ -8,6 +8,7 @@
 #include "functions.h"
 #include "globals.h"
 #include "objects.h"
+#include <ctime>
 #include <iterator>
 
 using namespace std;
@@ -23,16 +24,16 @@ int dice[2] = {0, 0};
 string decision;
 string exit_decision;
 void* Board[40];
-
+bool roll_flag = false;
+string purchase_decision;
 
 int main() {
+    srand(time(NULL));
 //--------------------------------------------------------------------------------------------------//
 //----------------------------------------Basic Starting Menu---------------------------------------//
 
     //-------------------------------------Player Name Input----------------------------------------//
     string input;
-    chanceDeck myDeck;
-
 
     cout << "                  MONOPOlY\n" << "Enter seed number:\n";
     cin >> seed;
@@ -76,6 +77,8 @@ int main() {
         play1.jailStatus = false;
         playerList.push_back(play1);
     }
+
+    chanceDeck myDeck; //Initialize the deck of Chance Cards
 //------------------------------------------------------------------------------------------------//
 //--------------------------------------Initialize Board Squares----------------------------------//
 
@@ -138,14 +141,6 @@ int main() {
             cout << "\nTURN " << state << "\n";
         }
 
-        if (command == "show") {
-            list<Player>::iterator iter;
-            for (iter = playerList.begin(); iter != playerList.end(); ++iter) {
-                iter->Check_Status();
-                cout << "\n";
-            }
-        }
-
         if ((command == "quit") || (command == "q")) {
             cout << "Thanks for playing!";
             break;
@@ -163,17 +158,15 @@ int main() {
         if (endgame == 1) {
             cout << "END GAME\n";
             cout << "The winner is: \n";
-
             break;
         }
 
 
         if (command == "next") {
-
             list<Player>::iterator iter;
             for (iter = playerList.begin(); iter != playerList.end(); ++iter) {
-                while(exit_decision != "no") {
-                    cout << iter->name << " ,what action would you like to take?\n";
+                while (exit_decision != "no") {
+                    cout << iter->name << ", what action would you like to take?\n";
                     cin >> decision;
 
                     if (decision == "sell") {
@@ -231,6 +224,13 @@ int main() {
                         cout << "Want to take another action?\n";
                         cin >> exit_decision;
                     }
+                    if (decision == "show") {
+                        list<Player>::iterator iter;
+                        for (iter = playerList.begin(); iter != playerList.end(); ++iter) {
+                            iter->Check_Status();
+                            cout << "\n";
+                        }
+                    }
                     if (iter->jailStatus) { // If in Jail then...
                         if (decision == "roll") {
                             cout << "\nYou cannot roll while in jail, please choose another option.\n";
@@ -247,17 +247,99 @@ int main() {
                             cin >> exit_decision;
                         }
                     }
-                    else{ // Ensures that player can't roll while in jail
+                    else { // Ensures that player can't roll while in jail
                         if (decision == "roll") {
-                            dice[0] = 1 + (rand() % 6);
-                            dice[1] = 1 + (rand() % 6);
-                            iter->move_forward(dice[0] + dice[1]);
-                            cout << "You are at position index " << iter->position << "\n";
-                            cout << "Want to take another action?\n";
-                            cin >> exit_decision;
+                            if (roll_flag == false) {
+                                roll_flag = true;
+                                dice[0] = 1 + (rand() % 6);
+                                dice[1] = 1 + (rand() % 6);
+                                cout << "Dice 1: " << dice[0] << "     ";
+                                cout << "Dice 2: " << dice[1] << endl;
+                                iter->move_forward(dice[0] + dice[1]);
+                                cout << "You are at position index " << iter->position << "\n";
+                                switch (iter -> position) {
+                                    // State machine that relates position index to board array
+                                    case 0:
+                                        cout << "Go Square\n";
+                                        iter->addMoney(200);
+                                        break;
+                                    case 1:
+                                        // prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << (*((propertySquare *) Board[iter -> position])).property.name << endl;
+                                        cout << "Color: " << (*((propertySquare *) Board[iter -> position])).property.color << endl;
+                                        cout << "Value: " << (*((propertySquare *) Board[iter -> position])).property.value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if ((*((propertySquare *) Board[iter -> position])).property.owned_flag) {
+                                            cout << (*((propertySquare *) Board[iter -> position])).property.name << " is owned by " << (*((propertySquare *) Board[iter -> position])).property.owner.name << endl;
+                                            cout << "You must pay: " << (0.1 * (*((propertySquare *) Board[iter -> position])).property.value);
+                                            iter->payPlayer((*((propertySquare *) Board[iter -> position])).property.owner, (0.1 * (*((propertySquare *) Board[iter -> position])).property.value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < (*((propertySquare *) Board[iter -> position])).property.value) {
+                                                    cout << "You're too broke\n";
+                                                }
+                                                else {
+                                                    iter -> ownedProperties.push_back((*((propertySquare *) Board[iter -> position])).property);
+                                                    iter ->chargeMoney((*((propertySquare *) Board[iter -> position])).property.value);
+                                                    (*((propertySquare *) Board[iter -> position])).property.owned_flag = true;
+                                                    *(*((propertySquare *) Board[iter -> position])).property.owner = iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 2: break;
+                                    case 3: break;
+                                    case 4: break;
+                                    case 5: break;
+                                    case 6: break;
+                                    case 7: break;
+                                    case 8: break;
+                                    case 9: break;
+                                    case 10: break;
+                                    case 11: break;
+                                    case 12: break;
+                                    case 13: break;
+                                    case 14: break;
+                                    case 15: break;
+                                    case 16: break;
+                                    case 17: break;
+                                    case 18: break;
+                                    case 19: break;
+                                    case 20: break;
+                                    case 21: break;
+                                    case 22: break;
+                                    case 23: break;
+                                    case 24: break;
+                                    case 25: break;
+                                    case 26: break;
+                                    case 27: break;
+                                    case 28: break;
+                                    case 29: break;
+                                    case 30: break;
+                                    case 31: break;
+                                    case 32: break;
+                                    case 33: break;
+                                    case 34: break;
+                                    case 35: break;
+                                    case 36: break;
+                                    case 37: break;
+                                    case 38: break;
+                                    case 39: break;
+                                }
+                                cout << "Want to take another action?\n";
+                                cin >> exit_decision;
+                            }
+                            else {
+                                cout << "You can't roll twice. Don't be greedy.\n";
+                            }
                         }
                     }
-
                 }
                 exit_decision = " ";
             }
@@ -265,11 +347,10 @@ int main() {
             cout << "      \"quit\" to exit the game.\n";
             cout << "      \"show\" to show players' info.\n";
         }
-
     }
 
 //------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------------------------------//
 
-        return 0;
+    return 0;
 }

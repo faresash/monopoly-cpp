@@ -21,7 +21,8 @@ public:
     std::string color; //What color it has
     int value; //Its value according to the bank
     std::string name; //Name of the property
-
+    bool owned_flag;
+    Player * owner;
 public:
     Property() { //default constructor
         id = 0;
@@ -34,6 +35,8 @@ public:
         color = col;
         value = val;
         name = nam;
+        owned_flag = false;
+        owner = nullptr;
     }
     Property operator = (const Property & other) { //= operator overload
         id = other.id;
