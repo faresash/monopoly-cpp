@@ -79,9 +79,15 @@ public:
         cout << "Wallet Amount: " << wallet << "\n";
         cout << "Properties Held: ";
         list <Property> :: iterator it;
-        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it)
+        int counter = 0;
+        for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it) {
+            counter++;
             cout << '\t' << it->getName();
+        }
+        if (counter == 0) cout << "none";
         cout << '\n';
+        cout << "Total Net Worth: ";
+        cout << Is_Bankrupt() << endl;
     }
 
     void Check_Properties(void) {
@@ -91,17 +97,17 @@ public:
         cout << '\n';
     }
 
-
-    void Is_Bankrupt (void) {
+    double Is_Bankrupt (void) {
         double totalVal = 0;
         list <Property> :: iterator it;
         for(it = ownedProperties.begin(); it != ownedProperties.end(); ++it) {
-            totalVal = totalVal + (double)it->getValue();
+            totalVal += (double)it->getValue();
         }
-        totalVal = totalVal + wallet;
-        if (totalVal < 0) {
+        totalVal += wallet;
+        if (totalVal <= 0) {
             bankruptcyStatus = true;
         }
+        return totalVal;
     }
 
 
@@ -123,14 +129,18 @@ public:
         wallet -= charge;
     }
 
-    void sellProperty(string Prop) {
-        for (auto itr = ownedProperties.begin(); itr != ownedProperties.end(); itr++) {
+    bool sellProperty(string Prop) {
+        list <Property> :: iterator itr;
+        for(itr = ownedProperties.begin(); itr != ownedProperties.end(); ++itr) {
             if (itr->name == Prop) {
-                ownedProperties.erase(itr);
                 wallet += itr->value;
+                ownedProperties.erase(itr);
+                return true;
             }
         }
+        return false;
     }
+
     void addMoney(double add) {
         wallet += add;
     }
@@ -140,26 +150,17 @@ public:
         position = 10;
     }
 
-    void payPlayer (Player other, double sum) {
+    void payPlayer (Player & other, double sum) {
         wallet -= sum;
         other.wallet += sum;
     }
 
-    void transferProperty(Player other, string prop, string transaction) {
-        if (transaction == "buy") {
-            for (auto itr = other.ownedProperties.begin(); itr != other.ownedProperties.end(); itr++) {
-                if (itr->name == prop) {
-                    ownedProperties.push_back(*itr);
-                    other.ownedProperties.erase(itr);
-                }
-            }
-        }
-        if (transaction == "sell") {
-            for (auto itr = other.ownedProperties.begin(); itr != other.ownedProperties.end(); itr++) {
-                if (itr->name == prop) {
-                    other.ownedProperties.push_back(*itr);
-                    ownedProperties.erase(itr);
-                }
+    void transferProperty(Player &other, string prop) {
+        for (auto itr = ownedProperties.begin(); itr != ownedProperties.end(); itr++) {
+            if (itr->name == prop) {
+                other.ownedProperties.push_back(*itr);
+                ownedProperties.erase(itr);
+                return;
             }
         }
     }
@@ -178,11 +179,16 @@ public:
     Chance(int Num) { //parameterized constructor
         index = Num;
     }
+
     Chance operator = (const Chance & other) { //= operator overload
         Name = other.Name;
         index = other.index;
         return *this;
     }
+
+ //   ~Chance() {std::cout << "No chances here!" ; }
+
+
     std::string getName() {
         return Name;
     }
@@ -259,7 +265,7 @@ public:
         deck.pop_front();
     }
 
-    void executeChance (Player play, list<Player> playerList) {
+    void executeChance (Player &play, list<Player> &playerList) {
         auto it = deck.begin();
         cout << '\n' << it -> Name << '\n';
         switch (it->getIndex()) {
