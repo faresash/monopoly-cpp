@@ -57,9 +57,14 @@ int main() {
         input.clear();
         if (playerCount < 2)
         {
-            cout << "Playing with two AIs!:\n"; 
+            cout << "Playing with two AIs!\n";
             Player AI_1("AI_1", 1, 0, 1500);
-            Player AI_2("AI_1", 2, 0, 1500);
+            Player AI_2("AI_2", 2, 0, 1500);
+            AI_1.jailStatus = false;
+            AI_2.jailStatus = false;
+            playerList.push_back(AI_1);
+            playerList.push_back(AI_2);
+            break;
         }
         else break;
     }
@@ -158,9 +163,9 @@ int main() {
             }
         }
 
-        if ((command == "quit") || (command == "q")) {
-            cout << "Thanks for playing!";
-            break;
+        if ((command == "quit") || (command == "Quit")) {
+            cout << "Thanks for playing!\n";
+            endgame = 1;
         }
 
         // Check for Bankruptcy and End Game
@@ -190,9 +195,10 @@ int main() {
                         cout << "You can [sell] a property, [trade] a property, [show] current status, or [roll] the dice!\n";
                     }
                     
-                    if ((iter->name != "AI_1") || (iter->name != "AI_2"))
-                        cin >> decision;
-                    else decision = "roll";
+                    if ((iter->name == "AI_1") || (iter->name == "AI_2"))
+                        decision = "roll";
+
+                    else cin >> decision;
                     
                     if (decision == "sell") {
                         /*
@@ -226,6 +232,8 @@ int main() {
                         cin >> tradePartner;
                         cout << "\nChoose an amount of money: ";
                         cin >> tradeAmount;
+                        cout << "Your options to sell are: ";
+                        iter->Check_Properties();
                         cout << "\nChoose a property to sell: ";
                         cin >> tradeProperty;
                         cout << "\nDid the other player agree to your offer? ";
@@ -266,7 +274,9 @@ int main() {
                             iter->jailStatus = false;
 
                             cout << "Want to take another action?\n";
-                            cin >> exit_decision;
+                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) exit_decision = "pay_jail";
+                            else cin >> exit_decision;
+
                         }
                     }
                     else { // Ensures that player can't roll while in jail
@@ -306,8 +316,10 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision == "yes";
+
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
                                             else cin >> purchase_decision;
+
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -343,7 +355,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -378,7 +391,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -409,7 +423,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -445,7 +460,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -476,7 +492,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -510,7 +527,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -541,7 +559,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -572,7 +591,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -603,7 +623,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -634,7 +655,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -665,7 +687,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -701,7 +724,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -732,7 +756,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -766,7 +791,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -802,7 +828,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -833,7 +860,8 @@ int main() {
                                             // Otherwise ask if player wants to buy current
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -864,7 +892,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -895,7 +924,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -926,7 +956,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -957,7 +988,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -988,7 +1020,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -1023,7 +1056,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -1054,7 +1088,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -1090,7 +1125,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -1121,7 +1157,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -1157,7 +1194,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -1192,7 +1230,8 @@ int main() {
                                             // Otherwise ask if player wants to buy
                                         else {
                                             cout << "This property is unowned\n" << "Would you like to buy it?\n";
-                                            cin >> purchase_decision;
+                                            if ((iter->name == "AI_1") || (iter->name == "AI_2")) purchase_decision = "yes";
+                                            else cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
                                                 if (iter -> wallet < curr->value) cout << "You're too broke\n";
@@ -1207,12 +1246,14 @@ int main() {
                                         break;
                                 }
                                 cout << "Want to take another action?\n";
-                                cin >> exit_decision;
+                                if ((iter->name == "AI_1") || (iter->name == "AI_2")) exit_decision = "no";
+                                else cin >> exit_decision;
                             }
                             else {
                                 cout << "You can't roll twice. Don't be greedy.\n";
                                 cout << "\nWant to take another action?\n";
-                                cin >> exit_decision;
+                                if ((iter->name == "AI_1") || (iter->name == "AI_2")) exit_decision = "no";
+                                else cin >> exit_decision;
                             }
                         }
                     }
@@ -1232,8 +1273,11 @@ int main() {
         for (win_it = playerList.begin(); win_it != playerList.end(); ++win_it) { //This algorithm calculates who has the highest net worth
             if ((win_it -> Is_Bankrupt()) > (winner -> Is_Bankrupt())) winner = win_it;
         }
-        cout << "                      " << winner -> name << "!!!!!!!!!!!!!!!" << "                     \n";
-        cout << "\nCongrats, you won at the least immersive game of Monopoly ever.\n";
+        cout << winner -> name << "  !!!!!!!!!!!!!!!" << "                     \n";
+        cout << "\nCongrats, you won at the least immersive version of Monopoly ever.\n";
+    }
+    else {
+        cout << "Unexpected Error\n" << "Hopefully this bug is patched in the next update\n";
     }
 //------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------------------------------//

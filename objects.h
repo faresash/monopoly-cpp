@@ -150,7 +150,7 @@ public:
         position = 10;
     }
 
-    void payPlayer (Player & other, double sum) {
+    void payPlayer (Player & other, double sum) { //Example of encapsulation
         wallet -= sum;
         other.wallet += sum;
     }
@@ -328,6 +328,8 @@ class Square {
 public:
     int index;
     std::string name;
+
+    virtual std::string getName() = 0; //PURE VIRTUAL FUNCTION
 };
 
 class propertySquare : public Square {
@@ -340,18 +342,24 @@ public:
         name = myName; //setting square name to argument
         property = newProp;
     }
+
+    std::string getName () {
+        return name;
+    }
 };
 
 class goSquare : public Square {
 public:
     int money;
-    std::string Name;
-    int index;
 public:
     goSquare(int myMoney, std::string myName, int myIndex) {
         money = myMoney;
         index = myIndex;
         name = myName;
+    }
+
+    std::string getName () {
+        return name;
     }
 };
 
@@ -437,6 +445,9 @@ public:
         name = myName;
         go_to_jail = newGoToJail;
     }
+    std::string getName() {
+        return name;
+    }
 };
 
 class freeParking {
@@ -473,6 +484,10 @@ public:
         name = myName;
         free_parking = new_freeParking;
     }
+
+    std::string getName () {
+        return name;
+    }
 };
 
 class taxSquare : public Square {
@@ -491,6 +506,10 @@ public:
         taxRate = rate;
         Name = Nam;
         index = ind;
+    }
+
+    std::string getName () {
+        return Name;
     }
 };
 
