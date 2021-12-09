@@ -12,8 +12,8 @@
 #include "globals.h"
 #include "objects.h"
 #include <iterator>
-
 using namespace std;
+class Player;
 
 class Property {
 public:
@@ -326,13 +326,13 @@ public:
 
 class propertySquare : public Square {
 public:
-    Property property; //each Property Square contains a pointer to a property
+    Property * property; //each Property Square contains a pointer to a property
 public:
     propertySquare(int myIndex, std::string myName, int ID, std::string col, int val) {
-        Property newProp(myIndex, col, val, myName); //allocating memory for the new property
+        Property * newProp = new Property(myIndex, col, val, myName); //allocating memory for the new property
         index = myIndex; //setting square index to argument
         name = myName; //setting square name to argument
-        property = newProp; //setting property to newly allocated one
+        property = newProp;
     }
 };
 
@@ -466,34 +466,6 @@ public:
         index = myIndex;
         name = myName;
         free_parking = new_freeParking;
-    }
-};
-
-class tax {
-private:
-    int taxRate; // Amount paid for tax
-    std::string Name; // Name of chance card
-    int index; // Index of card
-public:
-    tax() {
-        taxRate = 0;
-        Name = "No name";
-        index = 0;
-    }
-
-    tax(int rate, std::string Nam, int ind) { //parameterized constructor
-        taxRate = rate;
-        Name = Nam;
-        index = ind;
-    }
-    tax operator = (const tax & other) { //= operator overload
-        taxRate = other.taxRate;
-        Name = other.Name;
-        index = other.index;
-        return *this;
-    }
-    std::string getName() {
-        return Name;
     }
 };
 

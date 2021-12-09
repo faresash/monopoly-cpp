@@ -10,8 +10,9 @@
 #include "objects.h"
 #include <ctime>
 #include <iterator>
-
 using namespace std;
+
+
 list<string> players_ll; //linked list of player names
 int endgame = 0;
 int seed;
@@ -26,6 +27,9 @@ string exit_decision;
 void* Board[40];
 bool roll_flag = false;
 string purchase_decision;
+Property current;
+Property * curr;
+bool flag = true;
 
 int main() {
     srand(time(NULL));
@@ -106,7 +110,7 @@ int main() {
     Board[21] = new propertySquare(20, "KENTUCKY_AVENUE", 0, "red", 220);
     Board[22] = new Chance;
     Board[23] = new propertySquare(23, "INDIAN_AVENUE", 1, "red", 220);
-    Board[23] = new propertySquare(24, "ILLINOIS_AVENUE", 2, "red", 240);
+    Board[24] = new propertySquare(24, "ILLINOIS_AVENUE", 2, "red", 240);
     Board[25] = new propertySquare(25, "B.&O._RAILROAD", 2, "black", 200);
     Board[26] = new propertySquare(26,"ATLANTIC_AVENUE", 0, "yellow", 260);
     Board[27] = new propertySquare(27, "VENTNOR_AVENUE", 1, "yellow", 260);
@@ -141,6 +145,14 @@ int main() {
             cout << "\nTURN " << state << "\n";
         }
 
+        if (command == "show") {
+            list<Player>::iterator iter;
+            for (iter = playerList.begin(); iter != playerList.end(); ++iter) {
+                iter->Check_Status();
+                cout << "\n";
+            }
+        }
+
         if ((command == "quit") || (command == "q")) {
             cout << "Thanks for playing!";
             break;
@@ -160,7 +172,6 @@ int main() {
             cout << "The winner is: \n";
             break;
         }
-
 
         if (command == "next") {
             list<Player>::iterator iter;
@@ -224,13 +235,12 @@ int main() {
                         cout << "Want to take another action?\n";
                         cin >> exit_decision;
                     }
+
                     if (decision == "show") {
-                        list<Player>::iterator iter;
-                        for (iter = playerList.begin(); iter != playerList.end(); ++iter) {
-                            iter->Check_Status();
-                            cout << "\n";
-                        }
+                        iter->Check_Status();
+                        cout << "\n";
                     }
+
                     if (iter->jailStatus) { // If in Jail then...
                         if (decision == "roll") {
                             cout << "\nYou cannot roll while in jail, please choose another option.\n";
@@ -249,7 +259,7 @@ int main() {
                     }
                     else { // Ensures that player can't roll while in jail
                         if (decision == "roll") {
-                            if (roll_flag == false) {
+                            if (!roll_flag) {
                                 roll_flag = true;
                                 dice[0] = 1 + (rand() % 6);
                                 dice[1] = 1 + (rand() % 6);
@@ -261,19 +271,22 @@ int main() {
                                     // State machine that relates position index to board array
                                     case 0:
                                         cout << "Go Square\n";
-                                        iter->addMoney(200);
+                                        iter->addMoney((*((goSquare *) Board[iter -> position])).money);
                                         break;
                                     case 1:
-                                        // prints out important facts about property
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
                                         cout << "Property Square: ";
-                                        cout << (*((propertySquare *) Board[iter -> position])).property.name << endl;
-                                        cout << "Color: " << (*((propertySquare *) Board[iter -> position])).property.color << endl;
-                                        cout << "Value: " << (*((propertySquare *) Board[iter -> position])).property.value << endl;
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
                                         // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
-                                        if ((*((propertySquare *) Board[iter -> position])).property.owned_flag) {
-                                            cout << (*((propertySquare *) Board[iter -> position])).property.name << " is owned by " << (*((propertySquare *) Board[iter -> position])).property.owner.name << endl;
-                                            cout << "You must pay: " << (0.1 * (*((propertySquare *) Board[iter -> position])).property.value);
-                                            iter->payPlayer((*((propertySquare *) Board[iter -> position])).property.owner, (0.1 * (*((propertySquare *) Board[iter -> position])).property.value));
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
                                         }
                                             // Otherwise ask if player wants to buy
                                         else {
@@ -281,56 +294,900 @@ int main() {
                                             cin >> purchase_decision;
                                             if (purchase_decision == "yes") {
                                                 // IF player is broke they cannot buy the property and so they c
-                                                if (iter -> wallet < (*((propertySquare *) Board[iter -> position])).property.value) {
-                                                    cout << "You're too broke\n";
-                                                }
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
                                                 else {
-                                                    iter -> ownedProperties.push_back((*((propertySquare *) Board[iter -> position])).property);
-                                                    iter ->chargeMoney((*((propertySquare *) Board[iter -> position])).property.value);
-                                                    (*((propertySquare *) Board[iter -> position])).property.owned_flag = true;
-                                                    *(*((propertySquare *) Board[iter -> position])).property.owner = iter;
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
                                                 }
                                             }
                                         }
                                         break;
-                                    case 2: break;
-                                    case 3: break;
-                                    case 4: break;
-                                    case 5: break;
-                                    case 6: break;
-                                    case 7: break;
-                                    case 8: break;
-                                    case 9: break;
-                                    case 10: break;
-                                    case 11: break;
-                                    case 12: break;
-                                    case 13: break;
-                                    case 14: break;
-                                    case 15: break;
-                                    case 16: break;
-                                    case 17: break;
-                                    case 18: break;
-                                    case 19: break;
-                                    case 20: break;
-                                    case 21: break;
-                                    case 22: break;
-                                    case 23: break;
-                                    case 24: break;
-                                    case 25: break;
-                                    case 26: break;
-                                    case 27: break;
-                                    case 28: break;
-                                    case 29: break;
-                                    case 30: break;
-                                    case 31: break;
-                                    case 32: break;
-                                    case 33: break;
-                                    case 34: break;
-                                    case 35: break;
-                                    case 36: break;
-                                    case 37: break;
-                                    case 38: break;
-                                    case 39: break;
+                                    case 2:
+                                        cout << "Chance Square!\n";
+                                        myDeck.executeChance(*iter, playerList);
+                                        myDeck.popChance();
+                                        break;
+                                    case 3:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 4:
+                                        cout << "Tax Square!\n";
+                                        iter->chargeMoney((*((taxSquare *) Board[iter -> position])).taxRate);
+                                        break;
+                                    case 5:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 6:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 7:
+                                        cout << "Chance Square!\n";
+                                        myDeck.executeChance(*iter, playerList);
+                                        myDeck.popChance();
+                                        break;
+                                    case 8:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 9:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 10:
+                                        cout << "Just Visiting!";
+                                        break;
+                                    case 11:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 12:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 13:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 14:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 15:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 16:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 17:
+                                        cout << "Chance Square!\n";
+                                        myDeck.executeChance(*iter, playerList);
+                                        myDeck.popChance();
+                                        break;
+                                    case 18:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 19:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 20:
+                                        cout << "Free Parking!\n";
+                                        break;
+                                    case 21:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 22:
+                                        cout << "Chance Square!\n";
+                                        myDeck.executeChance(*iter, playerList);
+                                        myDeck.popChance();
+                                        break;
+                                    case 23:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 24:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 25:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 26:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 27:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 28:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 29:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 30:
+                                        iter -> goToJail();
+                                        break;
+                                    case 31:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 32:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 33:
+                                        cout << "Chance Square!\n";
+                                        myDeck.executeChance(*iter, playerList);
+                                        myDeck.popChance();
+                                        break;
+                                    case 34:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 35:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 36:
+                                        cout << "Chance Square!\n";
+                                        myDeck.executeChance(*iter, playerList);
+                                        myDeck.popChance();
+                                        break;
+                                    case 37:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case 38:
+                                        cout << "Luxury Tax Square! (Fancy)\n";
+                                        iter->chargeMoney((*((taxSquare *) Board[iter -> position])).taxRate);
+                                        break;
+                                    case 39:
+                                        //set a current value to reference the property were on
+                                        curr = (*((propertySquare *) Board[iter -> position])).property;
+
+                                        //prints out important facts about property
+                                        cout << "Property Square: ";
+                                        cout << curr->name << endl;
+                                        cout << "Color: " << curr->color << endl;
+                                        cout << "Value: " << curr->value << endl;
+                                        // IF the property is owned then you pay a fixed rate of 0.1 * the property value as rent
+                                        if (current.owned_flag) {
+                                            cout << current.name << " is owned by " << curr->owner -> name << endl;
+                                            cout << "You must pay: " << (0.1 * curr->value) << "\n";
+                                            iter->payPlayer(*curr->owner, (0.1 * curr->value));
+                                        }
+                                            // Otherwise ask if player wants to buy
+                                        else {
+                                            cout << "This property is unowned\n" << "Would you like to buy it?\n";
+                                            cin >> purchase_decision;
+                                            if (purchase_decision == "yes") {
+                                                // IF player is broke they cannot buy the property and so they c
+                                                if (iter -> wallet < curr->value) cout << "You're too broke\n";
+                                                else {
+                                                    curr->owned_flag = true;
+                                                    iter -> addProperty(*curr);
+                                                    iter -> chargeMoney(curr->value);
+                                                    curr->owner = &*iter;
+                                                }
+                                            }
+                                        }
+                                        break;
                                 }
                                 cout << "Want to take another action?\n";
                                 cin >> exit_decision;
@@ -342,6 +1199,7 @@ int main() {
                     }
                 }
                 exit_decision = " ";
+                roll_flag = false;
             }
             cout << "\nEnter \"next\" for next turn.\n";
             cout << "      \"quit\" to exit the game.\n";
