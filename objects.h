@@ -470,14 +470,21 @@ public:
 };
 
 class taxSquare : public Square {
-private:
-    tax Tax;
 public:
-    taxSquare(int mytaxRate, std::string myName, int myIndex) {
-        tax new_tax(mytaxRate, myName, myIndex);
-        index = myIndex;
-        name = myName;
-        Tax = new_tax;
+    int taxRate; // Amount paid for tax
+    std::string Name; // Name of chance card
+    int index; // Index of card
+public:
+    taxSquare() {
+        taxRate = 0;
+        Name = "No name";
+        index = 0;
+    }
+
+    taxSquare(int rate, std::string Nam, int ind) { //parameterized constructor
+        taxRate = rate;
+        Name = Nam;
+        index = ind;
     }
 };
 

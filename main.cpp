@@ -266,6 +266,9 @@ int main() {
                                 cout << "Dice 1: " << dice[0] << "     ";
                                 cout << "Dice 2: " << dice[1] << endl;
                                 iter->move_forward(dice[0] + dice[1]);
+                                /*if (flag) iter->move_forward(3);
+                                else iter -> move_forward(1);
+                                flag = !flag;*/
                                 cout << "You are at position index " << iter->position << "\n";
                                 switch (iter -> position) {
                                     // State machine that relates position index to board array
@@ -1194,6 +1197,8 @@ int main() {
                             }
                             else {
                                 cout << "You can't roll twice. Don't be greedy.\n";
+                                cout << "\nWant to take another action?\n";
+                                cin >> exit_decision;
                             }
                         }
                     }
